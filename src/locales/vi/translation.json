@@ -1,0 +1,12 @@
+{
+    "header": {
+        "home": "Trang Chủ",
+        "rentals": "Cho thuê",
+        "blogs": "Blogs",
+        "articles": "Bài viết",
+        "login": "Đăng nhập"
+    },
+    "login": {
+        "loginText": "Đăng nhập"
+    }
+}

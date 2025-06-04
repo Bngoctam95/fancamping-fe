@@ -1,0 +1,12 @@
+{
+    "header": {
+        "home": "Home",
+        "rentals": "Rentals",
+        "blogs": "Blogs",
+        "articles": "Articles",
+        "login": "Login"
+    },
+    "login": {
+        "loginText": "Sign In"
+    }
+}
