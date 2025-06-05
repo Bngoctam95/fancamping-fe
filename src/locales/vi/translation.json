@@ -1,4 +1,5 @@
 {
+    "siteName": "Fancamping",
     "header": {
         "home": "Trang Chủ",
         "rentals": "Cho thuê",
@@ -7,6 +8,39 @@
         "login": "Đăng nhập"
     },
     "login": {
-        "loginText": "Đăng nhập"
+        "loginText": "Đăng nhập",
+        "emailText": "Email",
+        "emailPlaceHolderText": "Nhập email của bạn",
+        "passwordText": "Mật khẩu",
+        "passwordPlaceHolderText": "Nhập mật khẩu của bạn",
+        "registerText": "Tạo tài khoản",
+        "backHomeText": "Quay về trang chủ",
+        "success": "Đăng nhập thành công",
+        "errorLabel": "Có lỗi xảy ra",
+        "errorMessage": "Đăng nhập thất bại"
+    },
+    "register": {
+        "registerText": "Tạo tài khoản",
+        "registerButtonText": "Đăng ký",
+        "loginText": "Đăng nhập",
+        "nameText": "Tên",
+        "namePlaceHolderText": "Nhập tên của bạn",
+        "emailText": "Email",
+        "emailPlaceHolderText": "Nhập email của bạn",
+        "passwordText": "Mật khẩu",
+        "passwordPlaceHolderText": "Nhập mật khẩu của bạn",
+        "confirmPasswordText": "Xác nhận mật khẩu",
+        "confirmPasswordPlaceHolderText": "Nhập lại mật khẩu của bạn",
+        "phoneText": "Số điện thoại",
+        "phonePlaceHolderText": "Nhập số điện thoại của bạn",
+        "backHomeText": "Quay về trang chủ",
+        "success": "Đăng ký thành công",
+        "email_already_exists": "Email đã tồn tại",
+        "errorMessage": "Đăng ký thất bại",
+        "errorLabel": "Lỗi xảy ra"
+    },
+    "user": {
+        "not_found": "Không tìm thấy tài khoản",
+        "invalid_password": "Mật khẩu không chính xác"
     }
 }
