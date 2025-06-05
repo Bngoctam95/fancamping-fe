@@ -9,6 +9,16 @@ import LoginPage from 'pages/client/auth/login.tsx';
 import RegisterPage from 'pages/client/auth/register.tsx';
 import RentalPage from 'pages/client/rental.tsx';
 import ArticlePage from 'pages/client/article.tsx';
+import { App } from 'antd';
+import { AppProvider } from 'context/app.context';
+import LayoutAdmin from 'components/layout/layout.admin';
+import DashboardPage from 'pages/admin/dashboard';
+import ManaBookPage from 'pages/admin/manage.book';
+import ManaUserPage from 'pages/admin/manage.user';
+import ManaOrderPage from 'pages/admin/manage.order';
+import ProfileAdmin from 'pages/admin/profile.admin';
+import SettingAdmin from 'pages/admin/setting.admin';
+import ProtectedRoute from 'components/auth';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,10 +50,68 @@ const router = createBrowserRouter([
     path: "/register",
     element: <RegisterPage />,
   },
+  {
+    path: "admin",
+    element: <LayoutAdmin />,
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "book",
+        element: (
+          <ProtectedRoute>
+            <ManaBookPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "user",
+        element: (
+          <ProtectedRoute>
+            <ManaUserPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "order",
+        element: (
+          <ProtectedRoute>
+            <ManaOrderPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <ProfileAdmin />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute>
+            <SettingAdmin />
+          </ProtectedRoute>
+        ),
+      },
+    ]
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <App>
+      <AppProvider>
+        <RouterProvider router={router} />
+      </AppProvider>
+    </App>
   </StrictMode>,
 )

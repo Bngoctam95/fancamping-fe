@@ -42,5 +42,13 @@
     "user": {
         "not_found": "Không tìm thấy tài khoản",
         "invalid_password": "Mật khẩu không chính xác"
+    },
+    "home": {
+        "hero": {
+            "title": "Khám phá Việt Nam",
+            "subtitle": "Thuê thiết bị, chia sẻ kinh nghiệm và khám phá những điểm cắm trại tuyệt vời trên toàn Việt Nam",
+            "rentEquipment": "Thuê Thiết Bị",
+            "joinCommunity": "Tham Gia Cộng Đồng"
+        }
     }
 }

@@ -139,7 +139,7 @@ const RegisterPage = () => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center w-full bg-[#0f172a]">
             <div className="flex items-center gap-2 mb-8">
-                <Tent className="text-primary text-4xl" />
+                <Tent className="text-secondary text-4xl" />
                 <span className="font-montserrat font-bold text-3xl text-white">
                     {t('siteName')}
                 </span>
@@ -291,7 +291,7 @@ const RegisterPage = () => {
                 </form>
 
                 <div className="mt-6 flex flex-col items-center gap-2 text-sm">
-                    <Link to="/login" className="text-primary hover:text-primary/80 transition-colors">{t("register.loginText")}</Link>
+                    <Link to="/login" className="text-secondary hover:text-secondary/80 transition-colors">{t("register.loginText")}</Link>
                     <Link to="/" className="text-gray-400 hover:text-gray-300 transition-colors">{t("register.backHomeText")}</Link>
                 </div>
             </div>

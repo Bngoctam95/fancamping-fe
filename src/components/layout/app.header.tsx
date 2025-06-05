@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import LanguageSwitcher from "components/ui/language.switcher";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { useCurrentApp } from "hooks/useCurrentApp";
 
 const AppHeader = () => {
     const { t } = useTranslation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [user, setUser] = useState(false);
-
+    const { user, isAuthenticated } = useCurrentApp();
+    console.log("user", user);
+    console.log("isAuthenticated", isAuthenticated);
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -24,7 +26,7 @@ const AppHeader = () => {
                     {/* Logo */}
                     <Link to="/">
                         <div className="flex items-center space-x-2 cursor-pointer">
-                            <Tent className="text-primary text-2xl" />
+                            <Tent className="text-secondary text-2xl" />
                             <span className="font-montserrat font-bold text-xl text-white">
                                 {t('siteName')}
                             </span>
@@ -33,19 +35,19 @@ const AppHeader = () => {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex space-x-8 items-center">
-                        <Link to="/" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                        <Link to="/" className="font-montserrat font-medium text-white hover:text-secondary transition-colors">
                             {t("header.home")}
                         </Link>
 
-                        <Link to="/rental" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                        <Link to="/rental" className="font-montserrat font-medium text-white hover:text-secondary transition-colors">
                             {t("header.rentals")}
                         </Link>
 
-                        <Link to="/blog" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                        <Link to="/blog" className="font-montserrat font-medium text-white hover:text-secondary transition-colors">
                             {t("header.blogs")}
                         </Link>
 
-                        <Link to="/article" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                        <Link to="/article" className="font-montserrat font-medium text-white hover:text-secondary transition-colors">
                             {t("header.articles")}
                         </Link>
 
@@ -58,23 +60,23 @@ const AppHeader = () => {
                         </div>
 
                         {/* User Menu */}
-                        {user ? (
-                            <User className="h-5 w-5" />
+                        {isAuthenticated ? (
+                            <User className="h-5 w-5 text-white" />
                         ) : (
-                            <Link to="/login" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                            <Link to="/login" className="font-montserrat font-medium text-white hover:text-secondary transition-colors">
                                 {t("header.login")}
                             </Link>
                         )}
 
-                        
+
 
                         {/* Mobile Menu Button */}
-                        <button 
+                        <button
                             className="md:hidden text-foreground text-xl focus:outline-none"
                             onClick={toggleMenu}
                             aria-label="Toggle menu"
                         >
-                        {isMenuOpen ? <X /> : <Menu />}
+                            {isMenuOpen ? <X /> : <Menu />}
                         </button>
                     </div>
                 </div>
@@ -82,53 +84,53 @@ const AppHeader = () => {
                 {/* Mobile Navigation */}
                 {isMenuOpen && (
                     <div className="md:hidden mt-4 pb-4">
-                        <Link to="/" className="block py-2 text-foreground hover:text-primary transition-colors">
+                        <Link to="/" className="block py-2 text-foreground hover:text-secondary transition-colors">
                             {t('header.home')}
                         </Link>
 
-                        <Link to="/rental" className="block py-2 text-foreground hover:text-primary transition-colors">
+                        <Link to="/rental" className="block py-2 text-foreground hover:text-secondary transition-colors">
                             {t("header.rentals")}
                         </Link>
 
-                        <Link to="/blog" className="block py-2 text-foreground hover:text-primary transition-colors">
+                        <Link to="/blog" className="block py-2 text-foreground hover:text-secondary transition-colors">
                             {t("header.blogs")}
                         </Link>
 
-                        <Link to="/article" className="block py-2 text-foreground hover:text-primary transition-colors">
+                        <Link to="/article" className="block py-2 text-foreground hover:text-secondary transition-colors">
                             {t("header.articles")}
                         </Link>
-                        
+
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                             <LanguageSwitcher />
-                            
-                            {user ? (
+
+                            {isAuthenticated ? (
                                 <>
-                                <Link to="/profile" className="block py-2 text-foreground hover:text-primary transition-colors">
-                                    Profile
-                                </Link>
-                                <Link to="/my-rentals" className="block py-2 text-foreground hover:text-primary transition-colors">
-                                    My Rentals
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="block w-full text-left py-2 text-foreground hover:text-primary transition-colors"
-                                >
-                                    Logout
-                                </button>
+                                    <Link to="/profile" className="block py-2 text-foreground hover:text-secondary transition-colors">
+                                        Profile
+                                    </Link>
+                                    <Link to="/my-rentals" className="block py-2 text-foreground hover:text-secondary transition-colors">
+                                        My Rentals
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="block w-full text-left py-2 text-foreground hover:text-secondary transition-colors"
+                                    >
+                                        Logout
+                                    </button>
                                 </>
                             ) : (
                                 <>
-                                <Link to="/login" className="block py-2 text-foreground hover:text-primary transition-colors">
-                                    {t('header.login')}
-                                </Link>
-                                <Link to="/register" className="block py-2 text-foreground hover:text-primary transition-colors">
-                                    Register
-                                </Link>
+                                    <Link to="/login" className="block py-2 text-foreground hover:text-secondary transition-colors">
+                                        {t('header.login')}
+                                    </Link>
+                                    <Link to="/register" className="block py-2 text-foreground hover:text-secondary transition-colors">
+                                        Register
+                                    </Link>
                                 </>
                             )}
                         </div>
                     </div>
-                    )}
+                )}
             </div>
         </header>
     )

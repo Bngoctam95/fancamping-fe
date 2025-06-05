@@ -33,6 +33,12 @@
       "locales/*": [
         "./src/locales/*"
       ],
+      "context/*": [
+        "./src/context/*"
+      ],
+      "hooks/*": [
+        "./src/hooks/*"
+      ]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

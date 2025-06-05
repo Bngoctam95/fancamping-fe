@@ -12,4 +12,11 @@ export const registerAPI = (name: string, email: string, password: string, phone
     return (
         axios.post<IBackendRes<IRegister>>(urlBackend, { name, email, password, phone })
     )
-}  
+}
+
+export const fetchAccountAPI = () => {
+    const urlBackend = "/auth/profile";
+    return (
+        axios.get<IBackendRes<IUser>>(urlBackend)
+    )
+}

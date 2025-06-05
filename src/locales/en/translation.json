@@ -21,7 +21,7 @@
     },
     "register": {
         "registerText": "Create account",
-        "registerButtonText": "Register" ,
+        "registerButtonText": "Register",
         "loginText": "Login",
         "nameText": "Name",
         "namePlaceHolderText": "Enter your name",
@@ -42,5 +42,13 @@
     "user": {
         "not_found": "User not found",
         "invalid_password": "Invalid password"
+    },
+    "home": {
+        "hero": {
+            "title": "Explore Vietnam's Outdoors",
+            "subtitle": "Rent equipment, share experiences, and discover the best camping spots across Vietnam",
+            "rentEquipment": "Rent Equipment",
+            "joinCommunity": "Join Community"
+        }
     }
 }
