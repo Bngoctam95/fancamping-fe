@@ -22,28 +22,20 @@ const AppHeader = () => {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex space-x-8 items-center">
-                        <Link to="/">
-                            <a className="font-montserrat font-medium text-white hover:text-primary transition-colors">
-                                {t("header.home")}
-                            </a>
+                        <Link to="/" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                            {t("header.home")}
                         </Link>
 
-                        <Link to="/rental">
-                            <a className="font-montserrat font-medium text-white hover:text-primary transition-colors">
-                                {t("header.rentals")}
-                            </a>
+                        <Link to="/rental" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                            {t("header.rentals")}
                         </Link>
 
-                        <Link to="/blog">
-                            <a className="font-montserrat font-medium text-white hover:text-primary transition-colors">
-                                {t("header.blogs")}
-                            </a>
+                        <Link to="/blog" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                            {t("header.blogs")}
                         </Link>
 
-                        <Link to="/article">
-                            <a className="font-montserrat font-medium text-white hover:text-primary transition-colors">
-                                {t("header.articles")}
-                            </a>
+                        <Link to="/article" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                            {t("header.articles")}
                         </Link>
 
                     </nav>
@@ -54,10 +46,8 @@ const AppHeader = () => {
                             <LanguageSwitcher />
                         </div>
 
-                        <Link to="/login">
-                            <a className="font-montserrat font-medium text-white hover:text-primary transition-colors">
-                                {t("header.login")}
-                            </a>
+                        <Link to="/login" className="font-montserrat font-medium text-white hover:text-primary transition-colors">
+                            {t("header.login")}
                         </Link>
                     </div>
                 </div>
