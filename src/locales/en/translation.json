@@ -1,12 +1,46 @@
 {
+    "siteName": "Fancamping",
     "header": {
         "home": "Home",
         "rentals": "Rentals",
         "blogs": "Blogs",
         "articles": "Articles",
-        "login": "Login"
+        "login": "Sign In"
     },
     "login": {
-        "loginText": "Sign In"
+        "loginText": "Sign In",
+        "emailText": "Email",
+        "emailPlaceHolderText": "Enter your email",
+        "passwordText": "Password",
+        "passwordPlaceHolderText": "Enter your password",
+        "registerText": "Create account",
+        "backHomeText": "Back to home page",
+        "success": "Login successfully",
+        "errorLabel": "Error occurs",
+        "errorMessage": "Login failed"
+    },
+    "register": {
+        "registerText": "Create account",
+        "registerButtonText": "Register" ,
+        "loginText": "Login",
+        "nameText": "Name",
+        "namePlaceHolderText": "Enter your name",
+        "emailText": "Email",
+        "emailPlaceHolderText": "Enter your email",
+        "passwordText": "Password",
+        "passwordPlaceHolderText": "Enter your password",
+        "confirmPasswordText": "Confirm password",
+        "confirmPasswordPlaceHolderText": "Enter your confirm password",
+        "phoneText": "Phone",
+        "phonePlaceHolderText": "Enter your phone",
+        "backHomeText": "Back to home page",
+        "success": "Registration successfully",
+        "email_already_exists": "Email already exists",
+        "errorMessage": "Registration failed",
+        "errorLabel": "Error occurs"
+    },
+    "user": {
+        "not_found": "User not found",
+        "invalid_password": "Invalid password"
     }
 }
