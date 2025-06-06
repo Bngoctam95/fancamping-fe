@@ -5,10 +5,16 @@
         "rentals": "Cho thuê",
         "blogs": "Blogs",
         "articles": "Bài viết",
-        "login": "Đăng nhập"
+        "login": "Đăng nhập",
+        "register": "Đăng ký",
+        "admin": "Quản trị",
+        "profile": "Hồ sơ",
+        "myRentals": "Thuê thiết bị",
+        "signOut": "Đăng xuất"
     },
     "login": {
         "loginText": "Đăng nhập",
+        "loginDescription": "Đăng nhập để thuê thiết bị và chia sẻ kinh nghiệm của bạn",
         "emailText": "Email",
         "emailPlaceHolderText": "Nhập email của bạn",
         "passwordText": "Mật khẩu",
@@ -21,6 +27,7 @@
     },
     "register": {
         "registerText": "Tạo tài khoản",
+        "registerDescription": "Tạo tài khoản để thuê thiết bị và chia sẻ kinh nghiệm của bạn",
         "registerButtonText": "Đăng ký",
         "loginText": "Đăng nhập",
         "nameText": "Tên",
@@ -50,5 +57,16 @@
             "rentEquipment": "Thuê Thiết Bị",
             "joinCommunity": "Tham Gia Cộng Đồng"
         }
+    },
+    "admin": {
+        "dashboard": "Bảng Điều Khiển",
+        "manageUsers": "Quản Lý Tài Khoản",
+        "manageProducts": "Quản Lý Sản Phẩm",
+        "manageCategories": "Quản Lý Danh Mục",
+        "manageOrders": "Quản Lý Đơn Hàng",
+        "crud": "Tùy Chỉnh",
+        "profile": "Hồ Sơ",
+        "settings": "Cài Dặt",
+        "logout": "Đăng xuất"
     }
 }

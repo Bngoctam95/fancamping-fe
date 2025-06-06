@@ -20,3 +20,10 @@ export const fetchAccountAPI = () => {
         axios.get<IBackendRes<IUser>>(urlBackend)
     )
 }
+
+export const logoutAPI = () => {
+    const urlBackend = "/auth/logout";
+    return (
+        axios.post<IBackendRes<IUser>>(urlBackend)
+    )
+}
