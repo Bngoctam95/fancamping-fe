@@ -1,7 +1,6 @@
-export { };
+export {};
 
 declare global {
-
     interface IBackendRes<T> {
         error?: string | string[];
         message: string;
@@ -16,8 +15,8 @@ declare global {
             pageSize: number;
             pages: number;
             total: number;
-        },
-        result: T[]
+        };
+        result: T[];
     }
 
     interface ILogin {
@@ -49,4 +48,15 @@ declare global {
         isActive: boolean;
     }
 
+    interface IUserTable {
+        _id: string;
+        fullName: string;
+        email: string;
+        phone: string;
+        role: string;
+        avatar: string;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }
 }

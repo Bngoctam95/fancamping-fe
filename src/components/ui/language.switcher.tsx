@@ -42,7 +42,7 @@ const LanguageSwitcher = () => {
         <div className="relative inline-block" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 bg-dropdown border border-gray-700 rounded py-2 px-3 text-white hover:border-blue-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer duration-200"
+                className="flex items-center gap-2 bg-dropdown border border-gray-700 rounded py-2 px-3 text-white text-base hover:border-blue-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer duration-200"
             >
                 <span>{language === 'vi' ? 'Tiếng Việt' : 'English'}</span>
                 <svg
@@ -61,7 +61,7 @@ const LanguageSwitcher = () => {
                             onClick={() => handleLanguageChange('vi')}
                             onMouseEnter={() => setHoveredLang('vi')}
                             onMouseLeave={() => setHoveredLang(null)}
-                            className={`flex items-center justify-between w-full px-2 py-2 text-sm text-white rounded hover:bg-gray-700 transition-colors duration-150 ${getActiveLanguage('vi') ? 'bg-gray-700' : ''}`}
+                            className={`flex items-center justify-between w-full px-2 py-2 text-base text-white rounded hover:bg-gray-700 transition-colors duration-150 ${getActiveLanguage('vi') ? 'bg-gray-700' : ''}`}
                         >
                             <span className="flex-1 text-left">Tiếng Việt</span>
                             <div className="flex-shrink-0 ml-4">
@@ -76,7 +76,7 @@ const LanguageSwitcher = () => {
                             onClick={() => handleLanguageChange('en')}
                             onMouseEnter={() => setHoveredLang('en')}
                             onMouseLeave={() => setHoveredLang(null)}
-                            className={`flex items-center justify-between w-full px-2 py-2 text-sm text-white rounded hover:bg-gray-700 transition-colors duration-150 ${getActiveLanguage('en') ? 'bg-gray-700' : ''}`}
+                            className={`flex items-center justify-between w-full px-2 py-2 text-base text-white rounded hover:bg-gray-700 transition-colors duration-150 ${getActiveLanguage('en') ? 'bg-gray-700' : ''}`}
                         >
                             <span className="flex-1 text-left">English</span>
                             <div className="flex-shrink-0 ml-8">

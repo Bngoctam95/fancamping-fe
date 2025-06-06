@@ -1,7 +1,7 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import './styles/global.scss';
-import Layout from '@/layout.tsx'
+import Layout from '@/layout.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from 'pages/client/home.tsx';
 import BlogPage from 'pages/client/blog.tsx';
@@ -9,109 +9,124 @@ import LoginPage from 'pages/client/auth/login.tsx';
 import RegisterPage from 'pages/client/auth/register.tsx';
 import RentalPage from 'pages/client/rental.tsx';
 import ArticlePage from 'pages/client/article.tsx';
-import { App } from 'antd';
+import { App, ConfigProvider } from 'antd';
 import { AppProvider } from 'context/app.context';
 import LayoutAdmin from 'components/layout/layout.admin';
 import DashboardPage from 'pages/admin/dashboard';
-import ManaBookPage from 'pages/admin/manage.book';
 import ManaUserPage from 'pages/admin/manage.user';
 import ManaOrderPage from 'pages/admin/manage.order';
 import ProfileAdmin from 'pages/admin/profile.admin';
 import SettingAdmin from 'pages/admin/setting.admin';
 import ProtectedRoute from 'components/auth';
+import { HelmetProvider } from 'react-helmet-async';
+import ManaProductPage from 'pages/admin/manage.product';
+import ManaCategoryPage from 'pages/admin/manage.category';
+import enUS from 'antd/locale/en_US';
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: "/rental",
-        element: <RentalPage />,
-      },
-      {
-        path: "/blog",
-        element: <BlogPage />,
-      },
-      {
-        path: "/article",
-        element: <ArticlePage />,
-      },
-    ]
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
-    path: "admin",
-    element: <LayoutAdmin />,
-    children: [
-      {
-        index: true,
-        element: (
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "book",
-        element: (
-          <ProtectedRoute>
-            <ManaBookPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "user",
-        element: (
-          <ProtectedRoute>
-            <ManaUserPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "order",
-        element: (
-          <ProtectedRoute>
-            <ManaOrderPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "profile",
-        element: (
-          <ProtectedRoute>
-            <ProfileAdmin />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "settings",
-        element: (
-          <ProtectedRoute>
-            <SettingAdmin />
-          </ProtectedRoute>
-        ),
-      },
-    ]
-  },
+    {
+        path: '/',
+        element: <Layout />,
+        children: [
+            {
+                index: true,
+                element: <HomePage />,
+            },
+            {
+                path: '/rental',
+                element: <RentalPage />,
+            },
+            {
+                path: '/blog',
+                element: <BlogPage />,
+            },
+            {
+                path: '/article',
+                element: <ArticlePage />,
+            },
+        ],
+    },
+    {
+        path: '/login',
+        element: <LoginPage />,
+    },
+    {
+        path: '/register',
+        element: <RegisterPage />,
+    },
+    {
+        path: 'admin',
+        element: <LayoutAdmin />,
+        children: [
+            {
+                index: true,
+                element: (
+                    <ProtectedRoute>
+                        <DashboardPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'product',
+                element: (
+                    <ProtectedRoute>
+                        <ManaProductPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'category',
+                element: (
+                    <ProtectedRoute>
+                        <ManaCategoryPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'user',
+                element: (
+                    <ProtectedRoute>
+                        <ManaUserPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'order',
+                element: (
+                    <ProtectedRoute>
+                        <ManaOrderPage />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'profile',
+                element: (
+                    <ProtectedRoute>
+                        <ProfileAdmin />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'settings',
+                element: (
+                    <ProtectedRoute>
+                        <SettingAdmin />
+                    </ProtectedRoute>
+                ),
+            },
+        ],
+    },
 ]);
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App>
-      <AppProvider>
-        <RouterProvider router={router} />
-      </AppProvider>
-    </App>
-  </StrictMode>,
-)
+    <StrictMode>
+        <HelmetProvider>
+            <App>
+                <AppProvider>
+                    <ConfigProvider locale={enUS}>
+                        <RouterProvider router={router} />
+                    </ConfigProvider>
+                </AppProvider>
+            </App>
+        </HelmetProvider>
+    </StrictMode>
+);

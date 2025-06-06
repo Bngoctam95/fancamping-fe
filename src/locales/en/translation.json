@@ -5,10 +5,16 @@
         "rentals": "Rentals",
         "blogs": "Blogs",
         "articles": "Articles",
-        "login": "Sign In"
+        "login": "Sign In",
+        "register": "Register",
+        "admin": "Admin",
+        "profile": "Profile",
+        "myRentals": "My Rentals",
+        "signOut": "Sign Out"
     },
     "login": {
         "loginText": "Sign In",
+        "loginDescription": "Sign in to your account to rent equipment and share your camping experiences",
         "emailText": "Email",
         "emailPlaceHolderText": "Enter your email",
         "passwordText": "Password",
@@ -21,6 +27,7 @@
     },
     "register": {
         "registerText": "Create account",
+        "registerDescription": "Create an account to rent equipment and share your camping experiences",
         "registerButtonText": "Register",
         "loginText": "Login",
         "nameText": "Name",
@@ -50,5 +57,16 @@
             "rentEquipment": "Rent Equipment",
             "joinCommunity": "Join Community"
         }
+    },
+    "admin": {
+        "dashboard": "Dashboard",
+        "manageUsers": "Manage Users",
+        "manageProducts": "Manage Products",
+        "manageCategories": "Manage Categories",
+        "manageOrders": "Manage Orders",
+        "crud": "CRUD",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout"
     }
 }
