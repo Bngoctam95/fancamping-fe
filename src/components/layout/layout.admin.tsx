@@ -90,7 +90,7 @@ const LayoutAdmin = () => {
     const isAdminRoute = location.pathname.includes('admin');
     if (isAdminRoute === true && isAuthenticated === true) {
         const role = user?.role;
-        if (role === 'USER') {
+        if (role === 'user') {
             return <Outlet />;
         }
     }
@@ -142,7 +142,6 @@ const LayoutAdmin = () => {
                                 gap: 10,
                             }}
                         >
-                            <LanguageSwitcher />
                             <Dropdown
                                 menu={{
                                     items: profileDropdownItems,

@@ -16,9 +16,9 @@ type TProps = {
     children: React.ReactNode
 }
 
-export const CurrentAppContext = createContext<IAppContext | null>(null);
+const CurrentAppContext = createContext<IAppContext | null>(null);
 
-export const AppProvider = (props: TProps) => {
+const AppProvider = (props: TProps) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -66,3 +66,5 @@ export const AppProvider = (props: TProps) => {
         </>
     );
 };
+
+export { CurrentAppContext, AppProvider };

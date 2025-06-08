@@ -21,7 +21,7 @@ import ProtectedRoute from 'components/auth';
 import { HelmetProvider } from 'react-helmet-async';
 import ManaProductPage from 'pages/admin/manage.product';
 import ManaCategoryPage from 'pages/admin/manage.category';
-import enUS from 'antd/locale/en_US';
+import viVN from 'antd/locale/vi_VN';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -122,7 +122,7 @@ createRoot(document.getElementById('root')!).render(
         <HelmetProvider>
             <App>
                 <AppProvider>
-                    <ConfigProvider locale={enUS}>
+                    <ConfigProvider locale={viVN}>
                         <RouterProvider router={router} />
                     </ConfigProvider>
                 </AppProvider>

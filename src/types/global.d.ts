@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
     interface IBackendRes<T> {
@@ -10,13 +10,11 @@ declare global {
     }
 
     interface IModelPaginate<T> {
-        meta: {
-            current: number;
-            pageSize: number;
-            pages: number;
-            total: number;
-        };
-        result: T[];
+        totalPages: number;
+        limit: number;
+        page: number;
+        total: number;
+        items: T[];
     }
 
     interface ILogin {
@@ -35,7 +33,7 @@ declare global {
     interface IRegister {
         _id: string;
         email: string;
-        fullName: string;
+        name: string;
     }
 
     interface IUser {
@@ -50,7 +48,7 @@ declare global {
 
     interface IUserTable {
         _id: string;
-        fullName: string;
+        name: string;
         email: string;
         phone: string;
         role: string;
@@ -58,5 +56,66 @@ declare global {
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+    }
+
+    interface IProductTable {
+        _id: string;
+        name: string;
+        slug: string;
+        description: string;
+        shortDescription: string;
+        thumbnail: string;
+        slider: string[];
+        price: number;
+        inventory: {
+            total: number;
+            available: number;
+            _id: string;
+        };
+        categoryId: {
+            _id: string;
+            name: string;
+            slug: string;
+        };
+        tags: string[];
+        ratings: {
+            average: number;
+            count: number;
+            _id: string;
+        };
+        status: string;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }
+
+    interface IDeleteEquipmentCategory {
+        statusCode: number;
+        message: string;
+        message_key: string;
+        data: IEquipmentCategory;
+    }
+    interface IDeleteUser {
+        statusCode: number;
+        message: string;
+        message_key: string;
+        data: null;
+    }
+
+    interface IEquipmentCategory {
+        _id: string;
+        name: string;
+        slug: string;
+        description: string;
+        image: string;
+        isActive: boolean;
+        order: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }
+
+    interface IInventory {
+        total: number;
+        available: number;
     }
 }

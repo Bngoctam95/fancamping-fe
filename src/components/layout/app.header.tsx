@@ -100,7 +100,7 @@ const AppHeader = () => {
                                                 <span>{user?.name || 'User'}</span>
                                             </div>
                                             <div className="my-1 border-t border-gray-700" />
-                                            {(user?.role === 'admin' || user?.role === 'super_admin') && (
+                                            {(user?.role === 'admin' || user?.role === 'super_admin' || user?.role === 'mod') && (
                                                 <Link
                                                     to="/admin"
                                                     className="flex items-center px-3 py-2 text-white text-base hover:bg-gray-700 rounded transition-colors duration-150"
