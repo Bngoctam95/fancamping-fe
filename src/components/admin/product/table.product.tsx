@@ -5,13 +5,16 @@ import { App, Button, Popconfirm } from 'antd';
 import { useRef, useState, useEffect } from 'react';
 import CreateProduct from 'components/admin/product/create.product';
 import ViewProduct from 'components/admin/product/view.product';
+import UpdateProduct from 'components/admin/product/update.product';
 
 const TableProduct = () => {
     const actionRef = useRef<ActionType>();
     const { message, notification } = App.useApp();
     const [openCreateProduct, setOpenCreateProduct] = useState(false);
     const [openViewProduct, setOpenViewProduct] = useState(false);
+    const [openUpdateProduct, setOpenUpdateProduct] = useState(false);
     const [productView, setProductView] = useState<IProductTable | null>(null);
+    const [productUpdate, setProductUpdate] = useState<IProductTable | null>(null);
     const [categories, setCategories] = useState<{ [key: string]: string }>({});
 
     const [meta, setMeta] = useState({
@@ -59,6 +62,11 @@ const TableProduct = () => {
     const handleViewProduct = (product: IProductTable) => {
         setOpenViewProduct(true);
         setProductView(product);
+    };
+
+    const handleUpdateProduct = (product: IProductTable) => {
+        setOpenUpdateProduct(true);
+        setProductUpdate(product);
     };
 
     const columns: ProColumns<IProductTable>[] = [
@@ -135,6 +143,9 @@ const TableProduct = () => {
                             twoToneColor="#f57800"
                             style={{ cursor: 'pointer', marginRight: 30 }}
                             title="Sửa sản phẩm"
+                            onClick={() => {
+                                handleUpdateProduct(entity);
+                            }}
                         />
 
                         <Popconfirm
@@ -250,6 +261,12 @@ const TableProduct = () => {
                 openViewProduct={openViewProduct}
                 setOpenViewProduct={setOpenViewProduct}
                 productView={productView}
+            />
+            <UpdateProduct
+                openUpdateProduct={openUpdateProduct}
+                setOpenUpdateProduct={setOpenUpdateProduct}
+                productUpdate={productUpdate}
+                refreshTable={refreshTable}
             />
         </>
     );

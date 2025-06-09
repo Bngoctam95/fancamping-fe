@@ -1,35 +1,22 @@
-import { PlusOutlined } from '@ant-design/icons';
-import {
-    App,
-    Button,
-    Col,
-    Divider,
-    Form,
-    Input,
-    InputNumber,
-    Modal,
-    Row,
-    Select,
-    Upload,
-    type FormProps,
-    type UploadFile,
-} from 'antd';
-import type { GetProp, UploadProps } from 'antd/lib';
-import { useEffect, useState } from 'react';
-import {
-    createProductAPI,
-    getEquipmentCategoriesAPI,
-    uploadProductSliderAPI,
-    uploadProductThumbnailAPI,
-} from 'services/api';
+import { Modal, Form, Input, Row, Col, Divider, Button, InputNumber, Select, Upload, App } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { getEquipmentCategoriesAPI, updateProductAPI, uploadProductSliderAPI, uploadProductThumbnailAPI } from "services/api";
+import type { FormProps, GetProp, UploadFile, UploadProps } from "antd/lib";
+import { v4 as uuidv4 } from 'uuid';
+import type { UploadChangeParam } from "antd/lib/upload";
 
-interface ICreateProductProps {
-    openCreateProduct: boolean;
-    setOpenCreateProduct: (open: boolean) => void;
+interface IUpdateProductProps {
+    openUpdateProduct: boolean;
+    setOpenUpdateProduct: (open: boolean) => void;
+    productUpdate: IProductTable | null;
     refreshTable: () => void;
 }
 
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
 type FieldType = {
+    _id: string;
     name: string;
     slug: string;
     shortDescription: string;
@@ -42,15 +29,19 @@ type FieldType = {
     slider: UploadFile[];
 };
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate, refreshTable }: IUpdateProductProps) => {
 
-const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }: ICreateProductProps) => {
     const [form] = Form.useForm();
     const { message } = App.useApp();
     const [loading, setLoading] = useState(false);
+    const [loadingThumbnail, setLoadingThumbnail] = useState(false);
+    const [loadingSlider, setLoadingSlider] = useState(false);
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const [options, setOptions] = useState<{ value: string; label: string }[]>([]);
     const [fileListThumbnail, setFileListThumbnail] = useState<UploadFile[]>([]);
     const [fileListSlider, setFileListSlider] = useState<UploadFile[]>([]);
-    const [options, setOptions] = useState<{ value: string; label: string }[]>([]);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewOpen, setPreviewOpen] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -70,16 +61,64 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
         fetchCategories();
     }, []);
 
+    useEffect(() => {
+        if (productUpdate) {
+            const arrThumbnail = [
+                {
+                    uid: uuidv4(),
+                    name: productUpdate.thumbnail,
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${productUpdate.thumbnail}`
+
+                }
+            ]
+
+            const arrSlider = productUpdate?.slider?.map(item => {
+                return {
+                    uid: uuidv4(),
+                    name: item,
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${item}`
+                }
+            })
+
+            form.setFieldsValue({
+                _id: productUpdate._id,
+                name: productUpdate.name,
+                slug: productUpdate.slug,
+                description: productUpdate.description,
+                shortDescription: productUpdate.shortDescription,
+                tags: productUpdate.tags,
+                price: productUpdate.price,
+                categoryId: productUpdate.categoryId._id,
+                inventory: productUpdate.inventory.total,
+                thumbnail: arrThumbnail,
+                slider: arrSlider
+            });
+
+            setFileListThumbnail(arrThumbnail as any);
+            setFileListSlider(arrSlider as any);
+        }
+    }, [productUpdate]);
+
     const handleCancel = () => {
-        setOpenCreateProduct(false);
+        setOpenUpdateProduct(false);
         form.resetFields();
         setFileListThumbnail([]);
         setFileListSlider([]);
     };
 
+    const getBase64 = (file: FileType): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+        });
+    }
+
     const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
-        setLoading(true);
-        const { name, slug, shortDescription, description, categoryId, tags, price, inventory } = values;
+        const { _id, name, slug, description, shortDescription, tags, price, inventory, categoryId } = values;
 
         // Format inventory data
         const inventoryData = {
@@ -87,32 +126,14 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             available: Number(inventory),
         };
 
-        // Get the uploaded thumbnail URL
-        let thumbnailUrl = '';
-        if (fileListThumbnail.length > 0 && fileListThumbnail[0].response) {
-            console.log('Thumbnail file:', fileListThumbnail[0]);
-            thumbnailUrl = fileListThumbnail[0].response;
-        }
+        const thumbnailName = fileListThumbnail?.[0]?.name || '';
 
-        // Get the uploaded slider URLs
-        const sliderUrls = fileListSlider.filter((file) => file.response).map((file) => file.response);
+        const sliderNames = fileListSlider?.map((item: any) => item.name) || [];
 
-        // Log the final data being sent
-        console.log('Data being sent:', {
-            name,
-            slug,
-            shortDescription,
-            description,
-            categoryId,
-            tags,
-            price,
-            inventory: inventoryData,
-            thumbnail: thumbnailUrl,
-            slider: sliderUrls,
-        });
+        setLoadingSubmit(true);
 
-        // Create the product
-        const res = await createProductAPI(
+        const res = await updateProductAPI(
+            _id,
             name,
             slug,
             shortDescription,
@@ -121,27 +142,52 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             tags,
             price,
             inventoryData,
-            thumbnailUrl,
-            sliderUrls
-        );
+            thumbnailName,
+            sliderNames
+        )
 
         if (res?.data) {
-            message.success('Tạo sản phẩm thành công');
-            handleCancel();
+            //success
+            form.resetFields();
+            setOpenUpdateProduct(false);
+            message.success('Updated Product Successfully!');
             refreshTable();
         } else {
-            message.error(res?.message || 'Có lỗi xảy ra');
+            //error
+            message.error(res.message);
         }
-
-        setLoading(false);
-    };
+        setLoadingSubmit(false);
+    }
 
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
         }
-        return e?.fileList;
+        return e && e.fileList;
     };
+
+    const handleUploadFileThumbnail = async (options: any) => {
+        const { file, onSuccess, onError } = options;
+        try {
+            const res = await uploadProductThumbnailAPI(file);
+            if (res?.data) {
+                const uploadFile: UploadFile = {
+                    uid: file.uid,
+                    name: res.data,
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${res.data}`
+                }
+                setFileListThumbnail([{ ...uploadFile }]);
+                if (onSuccess) onSuccess("ok");
+            } else {
+                if (onError) onError(new Error(res.message || 'Upload failed'));
+                message.error(res.message || 'Upload failed');
+            }
+        } catch (error: any) {
+            if (onError) onError(error);
+            message.error(error.message || 'Upload failed');
+        }
+    }
 
     const beforeUploadThumbnail = (file: FileType) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -153,7 +199,53 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             message.error('Image must smaller than 2MB!');
         }
         return isJpgOrPng && isLt2M;
-    };
+    }
+
+    const handleChangeThumbnail = (info: UploadChangeParam) => {
+        if (info.file.status === 'done') {
+            setLoadingThumbnail(true);
+            return;
+        }
+        if (info.file.status === 'error') {
+            setLoadingThumbnail(false);
+            return;
+        }
+    }
+
+    const handlePreviewThumbnail = async (file: UploadFile) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj as FileType);
+        }
+        setPreviewImage(file.url || (file.preview as string));
+        setPreviewOpen(true);
+    }
+
+    const handleRemoveThumbnail = () => {
+        setFileListThumbnail([]);
+    }
+
+    const handleUploadFileSlider = async (options: any) => {
+        const { file, onSuccess, onError } = options;
+        try {
+            const res = await uploadProductSliderAPI([file]); // Pass as array since API expects File[]
+            if (res?.data) {
+                const uploadFile: UploadFile = {
+                    uid: file.uid,
+                    name: res.data[0], // Take first item since we only upload one file at a time
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${res.data[0]}`
+                }
+                setFileListSlider((prevState) => [...prevState, { ...uploadFile }]);
+                if (onSuccess) onSuccess("ok");
+            } else {
+                if (onError) onError(new Error(res.message || 'Upload failed'));
+                message.error(res.message || 'Upload failed');
+            }
+        } catch (error: any) {
+            if (onError) onError(error);
+            message.error(error.message || 'Upload failed');
+        }
+    }
 
     const beforeUploadSlider = (file: FileType) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -165,77 +257,35 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             message.error('Image must smaller than 5MB!');
         }
         return isJpgOrPng && isLt5M;
-    };
-
-    const handleUploadFileThumbnail = async (options: any) => {
-        const { file, onSuccess, onError } = options;
-        try {
-            const res = await uploadProductThumbnailAPI(file);
-            console.log('Upload thumbnail response:', res);
-            if (res.data) {
-                console.log('Thumbnail path:', res.data);
-                onSuccess(res.data);
-            } else {
-                onError('Upload failed');
-            }
-        } catch (error: any) {
-            console.error('Upload thumbnail error:', error);
-            onError(error?.response?.data?.message || 'Upload failed');
-        }
-    };
-
-    const handleChangeThumbnail = (info: any) => {
-        setFileListThumbnail(info.fileList);
-    };
-
-    const handlePreviewThumbnail = async (file: UploadFile) => {
-        if (!file.url && !file.preview) {
-            file.preview = URL.createObjectURL(file.originFileObj as Blob);
-        }
-    };
-
-    const handleRemoveThumbnail = () => {
-        setFileListThumbnail([]);
-        return true;
-    };
-
-    const handleUploadFileSlider = async (options: any) => {
-        const { file, onSuccess, onError } = options;
-        try {
-            const res = await uploadProductSliderAPI([file]);
-            console.log('Upload slider response:', res);
-            if (res.data && res.data.length > 0) {
-                const sliderPath = res.data[0];
-                console.log('Slider path:', sliderPath);
-                onSuccess(sliderPath);
-            } else {
-                onError('Upload failed');
-            }
-        } catch (error: any) {
-            console.error('Upload slider error:', error);
-            onError(error?.response?.data?.message || 'Upload failed');
-        }
-    };
+    }
 
     const handleChangeSlider = (info: any) => {
-        setFileListSlider(info.fileList);
-    };
+        if (info.file.status === 'done') {
+            setLoadingSlider(true);
+            return;
+        }
+        if (info.file.status === 'error') {
+            setLoadingSlider(false);
+            return;
+        }
+    }
 
     const handlePreviewSlider = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
-            file.preview = URL.createObjectURL(file.originFileObj as Blob);
+            file.preview = await getBase64(file.originFileObj as FileType);
         }
-    };
+        setPreviewImage(file.url || (file.preview as string));
+        setPreviewOpen(true);
+    }
 
     const handleRemoveSlider = (file: UploadFile) => {
-        const newFileList = fileListSlider.filter((item) => item.uid !== file.uid);
-        setFileListSlider(newFileList);
-        return true;
-    };
+        setFileListSlider(fileListSlider.filter((f) => f.uid !== file.uid));
+    }
+
     return (
         <Modal
-            title="Tạo mới sản phẩm"
-            open={openCreateProduct}
+            title="Cập nhật sản phẩm"
+            open={openUpdateProduct}
             onCancel={handleCancel}
             footer={null}
             destroyOnHidden
@@ -244,6 +294,14 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             <Divider></Divider>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Row gutter={[16, 16]}>
+                    <Form.Item
+                        labelCol={{ span: 24 }}
+                        label="_id"
+                        name="_id"
+                        hidden
+                    >
+                        <Input />
+                    </Form.Item>
                     <Col span={12}>
                         {/* Name */}
                         <Form.Item
@@ -358,6 +416,7 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                                 onPreview={handlePreviewThumbnail}
                                 onRemove={handleRemoveThumbnail}
                                 fileList={fileListThumbnail}
+
                             >
                                 <div>
                                     <PlusOutlined />
@@ -398,13 +457,13 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                 </Row>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Tạo sản phẩm
+                    <Button type="primary" htmlType="submit" loading={loadingSubmit}>
+                        Cập nhật sản phẩm
                     </Button>
                 </Form.Item>
             </Form>
         </Modal>
-    );
-};
+    )
+}
 
-export default CreateProduct;
+export default UpdateProduct;

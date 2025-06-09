@@ -97,6 +97,34 @@ export const createProductAPI = (
     });
 };
 
+export const updateProductAPI = (
+    _id: string,
+    name: string,
+    slug: string,
+    shortDescription: string,
+    description: string,
+    categoryId: string,
+    tags: string[],
+    price: number,
+    inventory: IInventory,
+    thumbnail: string,
+    slider: string[]
+) => {
+    const urlBackend = `products/${_id}`;
+    return axios.put<IBackendRes<IProductTable>>(urlBackend, {
+        name,
+        slug,
+        shortDescription,
+        description,
+        categoryId,
+        tags,
+        price,
+        inventory,
+        thumbnail,
+        slider,
+    });
+};
+
 // API upload thumbnail
 export const uploadProductThumbnailAPI = (file: File) => {
     const formData = new FormData();
