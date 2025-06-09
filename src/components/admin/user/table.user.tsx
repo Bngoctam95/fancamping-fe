@@ -8,7 +8,6 @@ import ViewUser from 'components/admin/user/view.user';
 import UpdateUser from 'components/admin/user/update.user';
 import CreateUser from 'components/admin/user/create.user';
 
-
 const TableUser = () => {
     const actionRef = useRef<ActionType>();
     const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
@@ -23,12 +22,12 @@ const TableUser = () => {
         page: 1,
         limit: 5,
         totalPages: 0,
-        total: 0
+        total: 0,
     });
 
     const refreshTable = () => {
         actionRef.current?.reload();
-    }
+    };
 
     const handleDeleteUser = async (_id: string) => {
         setIsDeleteUser(true);
@@ -39,8 +38,8 @@ const TableUser = () => {
         } else {
             notification.error({
                 message: 'Lỗi xảy ra',
-                description: res.message
-            })
+                description: res.message,
+            });
         }
         setIsDeleteUser(false);
     };
@@ -48,16 +47,16 @@ const TableUser = () => {
     const handleViewUser = (user: IUserTable) => {
         setOpenViewUser(true);
         setUserView(user);
-    }
+    };
 
     const handleUpdateUser = (user: IUserTable) => {
         setOpenUpdateUser(true);
         setUserUpdate(user);
-    }
+    };
 
     const handleCreateUser = () => {
         setOpenCreateUser(true);
-    }
+    };
 
     const columns: ProColumns<IUserTable>[] = [
         {
@@ -72,10 +71,17 @@ const TableUser = () => {
             title: 'Id',
             dataIndex: '_id',
             hideInSearch: true,
-            render(dom, entity, index, action, schema) {
+            render(_, entity) {
                 return (
-                    <a href='#' onClick={() => { handleViewUser(entity) }}>{entity._id}</a>
-                )
+                    <a
+                        href="#"
+                        onClick={() => {
+                            handleViewUser(entity);
+                        }}
+                    >
+                        {entity._id}
+                    </a>
+                );
             },
         },
         {
@@ -98,33 +104,33 @@ const TableUser = () => {
         {
             title: 'Hành động',
             hideInSearch: true,
-            render(dom, entity, index, action, schema) {
+            render(_, entity) {
                 return (
                     <>
                         <EditTwoTone
                             twoToneColor="#f57800"
                             style={{ cursor: 'pointer', marginRight: 30 }}
-                            title='Sửa người dùng'
-                            onClick={() => { handleUpdateUser(entity) }}
+                            title="Sửa người dùng"
+                            onClick={() => {
+                                handleUpdateUser(entity);
+                            }}
                         />
 
                         <Popconfirm
                             title="Xóa người dùng"
                             description="Bạn có chắc chắn muốn xóa người dùng này không?"
-                            onConfirm={() => { handleDeleteUser(entity._id) }}
+                            onConfirm={() => {
+                                handleDeleteUser(entity._id);
+                            }}
                             okText="Xóa"
                             cancelText="Hủy"
-                            placement='leftTop'
+                            placement="leftTop"
                             okButtonProps={{ loading: isDeleteUser }}
                         >
-                            <DeleteTwoTone
-                                twoToneColor="#ff4d4f"
-                                style={{ cursor: 'pointer' }}
-                                title='Xóa người dùng'
-                            />
+                            <DeleteTwoTone twoToneColor="#ff4d4f" style={{ cursor: 'pointer' }} title="Xóa người dùng" />
                         </Popconfirm>
                     </>
-                )
+                );
             },
         },
     ];
@@ -138,17 +144,16 @@ const TableUser = () => {
                 request={async (params, sort, filter) => {
                     console.log(sort, filter, params);
 
-                    let query = "";
+                    let query = '';
 
                     if (params) {
-                        query += `page=${params.current}&limit=${params.pageSize}`
+                        query += `page=${params.current}&limit=${params.pageSize}`;
                         if (params.email) {
-                            query += `&email=${params.email}`
+                            query += `&email=${params.email}`;
                         }
                         if (params.name) {
-                            query += `&name=${params.name}`
+                            query += `&name=${params.name}`;
                         }
-
                     }
 
                     if (sort && Object.keys(sort).length > 0) {
@@ -171,8 +176,8 @@ const TableUser = () => {
                         data: res.data?.items,
                         page: 1,
                         success: true,
-                        total: res.data?.total
-                    }
+                        total: res.data?.total,
+                    };
                 }}
                 rowKey="_id"
                 pagination={{
@@ -183,8 +188,10 @@ const TableUser = () => {
                     pageSizeOptions: [5, 10, 20],
                     showTotal(total, range) {
                         return (
-                            <div>{range[0]}-{range[1]} trên {total} items</div>
-                        )
+                            <div>
+                                {range[0]}-{range[1]} trên {total} items
+                            </div>
+                        );
                     },
                 }}
                 headerTitle="Bảng người dùng"
@@ -198,25 +205,12 @@ const TableUser = () => {
                         }}
                     >
                         Thêm mới
-                    </Button>
+                    </Button>,
                 ]}
             />
-            <ViewUser
-                openViewUser={openViewUser}
-                setOpenViewUser={setOpenViewUser}
-                userView={userView}
-            />
-            <UpdateUser
-                openUpdateUser={openUpdateUser}
-                setOpenUpdateUser={setOpenUpdateUser}
-                userUpdate={userUpdate}
-                refreshTable={refreshTable}
-            />
-            <CreateUser
-                openCreateUser={openCreateUser}
-                setOpenCreateUser={setOpenCreateUser}
-                refreshTable={refreshTable}
-            />
+            <ViewUser openViewUser={openViewUser} setOpenViewUser={setOpenViewUser} userView={userView} />
+            <UpdateUser openUpdateUser={openUpdateUser} setOpenUpdateUser={setOpenUpdateUser} userUpdate={userUpdate} refreshTable={refreshTable} />
+            <CreateUser openCreateUser={openCreateUser} setOpenCreateUser={setOpenCreateUser} refreshTable={refreshTable} />
         </>
     );
 };

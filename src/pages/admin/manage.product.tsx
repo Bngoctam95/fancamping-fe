@@ -1,8 +1,8 @@
-import TableProduct from "components/admin/product/table.product";
+import TableProduct from 'components/admin/product/table.product';
 
 const ManaProductPage = () => {
     return (
-        <div>
+        <div style={{ marginTop: 20 }}>
             <TableProduct />
         </div>
     );

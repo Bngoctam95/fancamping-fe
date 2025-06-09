@@ -1,8 +1,27 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { App, Button, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Upload, type UploadFile } from "antd";
-import type { GetProp, UploadProps } from "antd/lib";
-import { useEffect, useState } from "react";
-import { createProductAPI, getEquipmentCategoriesAPI, uploadProductSliderAPI, uploadProductThumbnailAPI } from "services/api";
+import { PlusOutlined } from '@ant-design/icons';
+import {
+    App,
+    Button,
+    Col,
+    Divider,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    Row,
+    Select,
+    Upload,
+    type FormProps,
+    type UploadFile,
+} from 'antd';
+import type { GetProp, UploadProps } from 'antd/lib';
+import { useEffect, useState } from 'react';
+import {
+    createProductAPI,
+    getEquipmentCategoriesAPI,
+    uploadProductSliderAPI,
+    uploadProductThumbnailAPI,
+} from 'services/api';
 
 interface ICreateProductProps {
     openCreateProduct: boolean;
@@ -10,11 +29,18 @@ interface ICreateProductProps {
     refreshTable: () => void;
 }
 
-interface IBackendRes<T> {
-    statusCode: number;
-    message: string;
-    data: T;
-}
+type FieldType = {
+    name: string;
+    slug: string;
+    shortDescription: string;
+    description: string;
+    categoryId: string;
+    tags: string[];
+    price: number;
+    inventory: number;
+    thumbnail: UploadFile;
+    slider: UploadFile[];
+};
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -28,18 +54,16 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
 
     useEffect(() => {
         const fetchCategories = async () => {
-            try {
-                const res = await getEquipmentCategoriesAPI();
-                if (res?.data) {
-                    const categories = res.data as unknown as IEquipmentCategory[];
-                    const formattedOptions = categories.map((category) => ({
-                        value: category._id,
-                        label: category.name
-                    }));
-                    setOptions(formattedOptions);
-                }
-            } catch (error: any) {
-                message.error(error?.response?.data?.message || "Lỗi khi tải danh mục");
+            const res = await getEquipmentCategoriesAPI();
+            if (res?.data) {
+                const categories = res.data as unknown as IEquipmentCategory[];
+                const formattedOptions = categories.map((category) => ({
+                    value: category._id,
+                    label: category.name,
+                }));
+                setOptions(formattedOptions);
+            } else {
+                message.error(res?.message || 'Lỗi khi tải danh mục');
             }
         };
 
@@ -51,77 +75,73 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
         form.resetFields();
         setFileListThumbnail([]);
         setFileListSlider([]);
-    }
+    };
 
-    const handleSubmit = async (values: any) => {
-        try {
-            setLoading(true);
-            const { name, slug, shortDescription, description, categoryId, tags, price, inventory } = values;
+    const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
+        setLoading(true);
+        const { name, slug, shortDescription, description, categoryId, tags, price, inventory } = values;
 
-            // Format inventory data
-            const inventoryData = {
-                total: Number(inventory),
-                available: Number(inventory)
-            };
+        // Format inventory data
+        const inventoryData = {
+            total: Number(inventory),
+            available: Number(inventory),
+        };
 
-            // Get the uploaded thumbnail URL
-            let thumbnailUrl = "";
-            if (fileListThumbnail.length > 0 && fileListThumbnail[0].response) {
-                console.log('Thumbnail file:', fileListThumbnail[0]);
-                thumbnailUrl = fileListThumbnail[0].response;
-            }
-
-            // Get the uploaded slider URLs
-            const sliderUrls = fileListSlider
-                .filter(file => file.response)
-                .map(file => file.response);
-
-            // Log the final data being sent
-            console.log('Data being sent:', {
-                name,
-                slug,
-                shortDescription,
-                description,
-                categoryId,
-                tags,
-                price,
-                inventory: inventoryData,
-                thumbnail: thumbnailUrl,
-                slider: sliderUrls
-            });
-
-            // Create the product
-            const res = await createProductAPI(
-                name,
-                slug,
-                shortDescription,
-                description,
-                categoryId,
-                tags,
-                price,
-                inventoryData,
-                thumbnailUrl,
-                sliderUrls
-            );
-
-            if (res?.data) {
-                message.success("Tạo sản phẩm thành công");
-                handleCancel();
-                refreshTable();
-            }
-        } catch (error: any) {
-            message.error(error?.response?.data?.message || "Có lỗi xảy ra");
-        } finally {
-            setLoading(false);
+        // Get the uploaded thumbnail URL
+        let thumbnailUrl = '';
+        if (fileListThumbnail.length > 0 && fileListThumbnail[0].response) {
+            console.log('Thumbnail file:', fileListThumbnail[0]);
+            thumbnailUrl = fileListThumbnail[0].response;
         }
-    }
+
+        // Get the uploaded slider URLs
+        const sliderUrls = fileListSlider.filter((file) => file.response).map((file) => file.response);
+
+        // Log the final data being sent
+        console.log('Data being sent:', {
+            name,
+            slug,
+            shortDescription,
+            description,
+            categoryId,
+            tags,
+            price,
+            inventory: inventoryData,
+            thumbnail: thumbnailUrl,
+            slider: sliderUrls,
+        });
+
+        // Create the product
+        const res = await createProductAPI(
+            name,
+            slug,
+            shortDescription,
+            description,
+            categoryId,
+            tags,
+            price,
+            inventoryData,
+            thumbnailUrl,
+            sliderUrls
+        );
+
+        if (res?.data) {
+            message.success('Tạo sản phẩm thành công');
+            handleCancel();
+            refreshTable();
+        } else {
+            message.error(res?.message || 'Có lỗi xảy ra');
+        }
+
+        setLoading(false);
+    };
 
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
         }
         return e?.fileList;
-    }
+    };
 
     const beforeUploadThumbnail = (file: FileType) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -156,28 +176,28 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                 console.log('Thumbnail path:', res.data);
                 onSuccess(res.data);
             } else {
-                onError("Upload failed");
+                onError('Upload failed');
             }
         } catch (error: any) {
             console.error('Upload thumbnail error:', error);
-            onError(error?.response?.data?.message || "Upload failed");
+            onError(error?.response?.data?.message || 'Upload failed');
         }
-    }
+    };
 
     const handleChangeThumbnail = (info: any) => {
         setFileListThumbnail(info.fileList);
-    }
+    };
 
     const handlePreviewThumbnail = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
             file.preview = URL.createObjectURL(file.originFileObj as Blob);
         }
-    }
+    };
 
     const handleRemoveThumbnail = () => {
         setFileListThumbnail([]);
         return true;
-    }
+    };
 
     const handleUploadFileSlider = async (options: any) => {
         const { file, onSuccess, onError } = options;
@@ -189,32 +209,32 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                 console.log('Slider path:', sliderPath);
                 onSuccess(sliderPath);
             } else {
-                onError("Upload failed");
+                onError('Upload failed');
             }
         } catch (error: any) {
             console.error('Upload slider error:', error);
-            onError(error?.response?.data?.message || "Upload failed");
+            onError(error?.response?.data?.message || 'Upload failed');
         }
-    }
+    };
 
     const handleChangeSlider = (info: any) => {
         setFileListSlider(info.fileList);
-    }
+    };
 
     const handlePreviewSlider = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
             file.preview = URL.createObjectURL(file.originFileObj as Blob);
         }
-    }
+    };
 
     const handleRemoveSlider = (file: UploadFile) => {
-        const newFileList = fileListSlider.filter(item => item.uid !== file.uid);
+        const newFileList = fileListSlider.filter((item) => item.uid !== file.uid);
         setFileListSlider(newFileList);
         return true;
-    }
+    };
     return (
         <Modal
-            title='Tạo mới sản phẩm'
+            title="Tạo mới sản phẩm"
             open={openCreateProduct}
             onCancel={handleCancel}
             footer={null}
@@ -222,11 +242,7 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             width={'50vw'}
         >
             <Divider></Divider>
-            <Form
-                form={form}
-                layout="vertical"
-                onFinish={handleSubmit}
-            >
+            <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
                         {/* Name */}
@@ -240,11 +256,7 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                     </Col>
                     <Col span={12}>
                         {/* Slug */}
-                        <Form.Item
-                            label="Slug"
-                            name="slug"
-                            rules={[{ required: true, message: 'Vui lòng nhập slug' }]}
-                        >
+                        <Form.Item label="Slug" name="slug" rules={[{ required: true, message: 'Vui lòng nhập slug' }]}>
                             <Input id="modal_slug" />
                         </Form.Item>
                     </Col>
@@ -281,19 +293,12 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                             name="categoryId"
                             rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
                         >
-                            <Select
-                                options={options}
-                                placeholder="Chọn danh mục"
-                            />
+                            <Select options={options} placeholder="Chọn danh mục" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         {/* Tags */}
-                        <Form.Item
-                            label="Tags"
-                            name="tags"
-                            rules={[{ required: true, message: 'Vui lòng nhập tags' }]}
-                        >
+                        <Form.Item label="Tags" name="tags" rules={[{ required: true, message: 'Vui lòng nhập tags' }]}>
                             <Select
                                 mode="tags"
                                 style={{ width: '100%' }}
@@ -307,16 +312,14 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                 <Row gutter={[16, 16]}>
                     <Col span={12}>
                         {/* Price */}
-                        <Form.Item
-                            label="Giá"
-                            name="price"
-                            rules={[{ required: true, message: 'Vui lòng nhập giá' }]}
-                        >
+                        <Form.Item label="Giá" name="price" rules={[{ required: true, message: 'Vui lòng nhập giá' }]}>
                             <InputNumber
                                 min={0}
                                 style={{ width: '100%' }}
                                 addonBefore="VND"
                                 placeholder="Nhập giá"
+                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                                parser={(value) => value!.replace(/\./g, '')}
                             />
                         </Form.Item>
                     </Col>
@@ -327,11 +330,7 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                             name="inventory"
                             rules={[{ required: true, message: 'Vui lòng nhập số lượng' }]}
                         >
-                            <InputNumber
-                                min={0}
-                                style={{ width: '100%' }}
-                                placeholder="Nhập số lượng"
-                            />
+                            <InputNumber min={0} style={{ width: '100%' }} placeholder="Nhập số lượng" />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -353,7 +352,9 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                                 multiple={false}
                                 customRequest={(options) => handleUploadFileThumbnail(options)}
                                 beforeUpload={beforeUploadThumbnail}
-                                onChange={(info) => { handleChangeThumbnail(info) }}
+                                onChange={(info) => {
+                                    handleChangeThumbnail(info);
+                                }}
                                 onPreview={handlePreviewThumbnail}
                                 onRemove={handleRemoveThumbnail}
                                 fileList={fileListThumbnail}
@@ -380,7 +381,9 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                                 multiple={true}
                                 customRequest={(options) => handleUploadFileSlider(options)}
                                 beforeUpload={beforeUploadSlider}
-                                onChange={(info) => { handleChangeSlider(info) }}
+                                onChange={(info) => {
+                                    handleChangeSlider(info);
+                                }}
                                 onPreview={handlePreviewSlider}
                                 onRemove={(file) => handleRemoveSlider(file)}
                                 fileList={fileListSlider}
@@ -401,7 +404,7 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
                 </Form.Item>
             </Form>
         </Modal>
-    )
-}
+    );
+};
 
 export default CreateProduct;

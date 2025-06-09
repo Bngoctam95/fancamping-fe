@@ -1,28 +1,65 @@
-import { getProductsAPI } from "services/api";
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
-import { ProTable, type ActionType, type ProColumns } from "@ant-design/pro-components";
-import { Button, Popconfirm } from "antd";
-import { useRef, useState } from "react";
-import CreateProduct from "components/admin/product/create.product";
+import { deleteProductAPI, getProductsAPI, getEquipmentCategoriesAPI } from 'services/api';
+import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
+import { ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components';
+import { App, Button, Popconfirm } from 'antd';
+import { useRef, useState, useEffect } from 'react';
+import CreateProduct from 'components/admin/product/create.product';
+import ViewProduct from 'components/admin/product/view.product';
 
 const TableProduct = () => {
     const actionRef = useRef<ActionType>();
+    const { message, notification } = App.useApp();
     const [openCreateProduct, setOpenCreateProduct] = useState(false);
+    const [openViewProduct, setOpenViewProduct] = useState(false);
+    const [productView, setProductView] = useState<IProductTable | null>(null);
+    const [categories, setCategories] = useState<{ [key: string]: string }>({});
 
     const [meta, setMeta] = useState({
         page: 1,
-        limit: 5,
+        limit: 10,
         totalPages: 0,
-        total: 0
+        total: 0,
     });
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const res = await getEquipmentCategoriesAPI();
+            if (res?.data) {
+                const categoryMap = (res.data as unknown as IEquipmentCategory[]).reduce((acc, category) => {
+                    acc[category._id] = category.name;
+                    return acc;
+                }, {} as { [key: string]: string });
+                setCategories(categoryMap);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const refreshTable = () => {
         actionRef.current?.reload();
-    }
+    };
 
     const handleCreateProduct = () => {
         setOpenCreateProduct(true);
-    }
+    };
+
+    const handleDeleteProduct = async (_id: string) => {
+        const res = await deleteProductAPI(_id);
+        if (res?.data) {
+            message.success('Xóa sản phẩm thành công!');
+            refreshTable();
+        } else {
+            notification.error({
+                message: 'Lỗi xảy ra',
+                description: res.message,
+            });
+        }
+    };
+
+    const handleViewProduct = (product: IProductTable) => {
+        setOpenViewProduct(true);
+        setProductView(product);
+    };
 
     const columns: ProColumns<IProductTable>[] = [
         {
@@ -37,10 +74,16 @@ const TableProduct = () => {
             title: 'Id',
             dataIndex: '_id',
             hideInSearch: true,
-            render(dom, entity, index, action, schema) {
+            render(_, entity) {
                 return (
-                    <a>{entity._id}</a>
-                )
+                    <a
+                        onClick={() => {
+                            handleViewProduct(entity);
+                        }}
+                    >
+                        {entity._id}
+                    </a>
+                );
             },
         },
         {
@@ -50,7 +93,13 @@ const TableProduct = () => {
         },
         {
             title: 'Danh mục',
-            dataIndex: ['categoryId', 'name'],
+            dataIndex: ['categoryId', '_id'],
+            hideInSearch: true,
+            filters: true,
+            onFilter: true,
+            ellipsis: true,
+            valueType: 'select',
+            valueEnum: categories,
         },
         {
             title: 'Mô tả',
@@ -61,10 +110,9 @@ const TableProduct = () => {
             title: 'Giá',
             dataIndex: 'price',
             hideInSearch: true,
-            valueType: 'money',
-            fieldProps: {
-                prefix: 'VND'
-            }
+            render: (price) => {
+                return new Intl.NumberFormat('vi-VN').format(Number(price) || 0) + ' đ';
+            },
         },
         {
             title: 'Ngày tạo',
@@ -75,18 +123,18 @@ const TableProduct = () => {
                 const dateA = new Date(a.createdAt).getTime();
                 const dateB = new Date(b.createdAt).getTime();
                 return dateA - dateB;
-            }
+            },
         },
         {
             title: 'Hành động',
             hideInSearch: true,
-            render(dom, entity, index, action, schema) {
+            render(_, entity) {
                 return (
                     <>
                         <EditTwoTone
                             twoToneColor="#f57800"
                             style={{ cursor: 'pointer', marginRight: 30 }}
-                            title='Sửa sản phẩm'
+                            title="Sửa sản phẩm"
                         />
 
                         <Popconfirm
@@ -94,16 +142,15 @@ const TableProduct = () => {
                             description="Bạn có chắc chắn muốn xóa sản phẩm này không?"
                             okText="Xóa"
                             cancelText="Hủy"
-                            placement='leftTop'
+                            placement="leftTop"
+                            onConfirm={() => {
+                                handleDeleteProduct(entity._id);
+                            }}
                         >
-                            <DeleteTwoTone
-                                twoToneColor="#ff4d4f"
-                                style={{ cursor: 'pointer' }}
-                                title='Xóa sản phẩm'
-                            />
+                            <DeleteTwoTone twoToneColor="#ff4d4f" style={{ cursor: 'pointer' }} title="Xóa sản phẩm" />
                         </Popconfirm>
                     </>
-                )
+                );
             },
         },
     ];
@@ -129,15 +176,15 @@ const TableProduct = () => {
                 request={async (params, sort, filter) => {
                     console.log(sort, filter, params);
 
-                    let query = "";
+                    let query = '';
 
                     if (params) {
-                        query += `page=${params.current}&limit=${params.pageSize}`
+                        query += `page=${params.current}&limit=${params.pageSize}`;
                         if (params.name) {
-                            query += `&name=${params.name}`
+                            query += `&name=${params.name}`;
                         }
                         if (params.categoryId) {
-                            query += `&categoryId=${params.categoryId}`
+                            query += `&categoryId=${params.categoryId}`;
                         }
                     }
 
@@ -154,6 +201,7 @@ const TableProduct = () => {
                     if (res.data) {
                         const { page, limit, totalPages, total } = res.data;
                         const meta = { page, limit, totalPages, total };
+                        console.log('meta', meta);
                         setMeta(meta);
                     }
 
@@ -161,21 +209,22 @@ const TableProduct = () => {
                         data: res.data?.items,
                         page: 1,
                         success: true,
-                        total: res.data?.total
-                    }
-
+                        total: res.data?.total,
+                    };
                 }}
                 rowKey="_id"
                 pagination={{
-                    pageSize: 5,
-                    current: 1,
-                    total: 0,
+                    pageSize: meta.limit,
+                    current: meta.page,
+                    total: meta.total,
                     showSizeChanger: true,
-                    pageSizeOptions: [5, 10, 20],
+                    pageSizeOptions: [10, 20],
                     showTotal(total, range) {
                         return (
-                            <div>{range[0]}-{range[1]} trên {total} mục</div>
-                        )
+                            <div>
+                                {range[0]}-{range[1]} trên {total} mục
+                            </div>
+                        );
                     },
                 }}
                 headerTitle="Bảng sản phẩm"
@@ -189,7 +238,7 @@ const TableProduct = () => {
                         }}
                     >
                         Thêm mới
-                    </Button>
+                    </Button>,
                 ]}
             />
             <CreateProduct
@@ -197,8 +246,13 @@ const TableProduct = () => {
                 setOpenCreateProduct={setOpenCreateProduct}
                 refreshTable={refreshTable}
             />
+            <ViewProduct
+                openViewProduct={openViewProduct}
+                setOpenViewProduct={setOpenViewProduct}
+                productView={productView}
+            />
         </>
     );
-}
+};
 
 export default TableProduct;
