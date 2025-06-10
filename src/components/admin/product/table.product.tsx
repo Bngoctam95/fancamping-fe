@@ -113,11 +113,14 @@ const TableProduct = () => {
             title: 'Mô tả',
             dataIndex: 'description',
             hideInSearch: true,
+            ellipsis: true,
+            width: 400,
         },
         {
             title: 'Giá',
             dataIndex: 'price',
             hideInSearch: true,
+            width: 150,
             render: (price) => {
                 return new Intl.NumberFormat('vi-VN').format(Number(price) || 0) + ' đ';
             },
@@ -126,6 +129,7 @@ const TableProduct = () => {
             title: 'Ngày tạo',
             dataIndex: 'createdAt',
             hideInSearch: true,
+            width: 150,
             valueType: 'date',
             sorter: (a, b) => {
                 const dateA = new Date(a.createdAt).getTime();
@@ -136,6 +140,7 @@ const TableProduct = () => {
         {
             title: 'Hành động',
             hideInSearch: true,
+            width: 150,
             render(_, entity) {
                 return (
                     <>

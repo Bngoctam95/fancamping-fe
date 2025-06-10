@@ -63,44 +63,54 @@ const ViewProduct = ({ openViewProduct, setOpenViewProduct, productView }: IView
     const items: DescriptionsProps['items'] = [
         {
             label: 'Id',
+            span: 1,
             children: productView?._id,
         },
         {
             label: 'Tên sản phẩm',
+            span: 1,
             children: productView?.name,
         },
         {
             label: 'Mô tả',
+            span: 2,
             children: productView?.description,
         },
         {
             label: 'Mô tả ngắn',
+            span: 2,
             children: productView?.shortDescription,
         },
         {
             label: 'Danh mục',
+            span: 1,
             children: productView?.categoryId?.name || '-',
         },
         {
             label: 'Tags',
+            span: 1,
             children: productView?.tags?.join(', ') || '-',
         },
         {
             label: 'Giá',
+            span: 1,
             children: productView?.price
                 ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productView.price)
                 : '-',
         },
         {
             label: 'Số lượng',
+            span: 1,
             children: productView?.inventory?.total,
         },
         {
             label: 'Ngày tạo',
+            span: 1,
             children: formatDate(productView?.createdAt),
         },
         {
             label: 'Ngày cập nhật',
+            span: 1,
             children: formatDate(productView?.updatedAt),
         },
     ];
@@ -108,7 +118,7 @@ const ViewProduct = ({ openViewProduct, setOpenViewProduct, productView }: IView
     return (
         <Drawer
             title="Xem chi tiết sản phẩm"
-            width={'50vw'}
+            width={'70vw'}
             onClose={onClose}
             open={openViewProduct}
             styles={{
