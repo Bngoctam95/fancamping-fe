@@ -50,14 +50,6 @@
         "not_found": "User not found",
         "invalid_password": "Invalid password"
     },
-    "home": {
-        "hero": {
-            "title": "Explore Vietnam's Outdoors",
-            "subtitle": "Rent equipment, share experiences, and discover the best camping spots across Vietnam",
-            "rentEquipment": "Rent Equipment",
-            "joinCommunity": "Join Community"
-        }
-    },
     "admin": {
         "dashboard": "Dashboard",
         "manageUsers": "Manage Users",
@@ -68,5 +60,30 @@
         "profile": "Profile",
         "settings": "Settings",
         "logout": "Logout"
+    },
+    "home": {
+        "hero": {
+            "title": "Explore Vietnam's Outdoors",
+            "subtitle": "Rent equipment, share experiences, and discover the best camping spots across Vietnam",
+            "rentEquipment": "Rent Equipment",
+            "joinCommunity": "Join Community"
+        }
+    },
+    "rental": {
+        "hero": {
+            "title": "Rent Equipment",
+            "subtitle": "Rent equipment, share experiences, and discover the best camping spots across Vietnam"
+        }
+    },
+    "equipment": {
+        "featured": {
+            "title": "Featured Camping Equipment",
+            "subtitle": "High-quality camping gear available for rent",
+            "noEquipment": "No equipment found matching your criteria.",
+            "viewAll": "View All Equipment",
+            "day": "day",
+            "rentNow": "Rent Now",
+            "reviews": "reviews"
+        }
     }
 }

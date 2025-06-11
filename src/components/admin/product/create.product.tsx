@@ -238,11 +238,11 @@ const CreateProduct = ({ openCreateProduct, setOpenCreateProduct, refreshTable }
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-            .replace(/[đĐ]/g, 'd')           // Replace Vietnamese 'd'
-            .replace(/[^a-z0-9\s-]/g, '')    // Remove special characters
-            .replace(/\s+/g, '-')            // Replace spaces with -
-            .replace(/-+/g, '-')             // Replace multiple - with single -
-            .trim();                         // Trim - from start and end of text
+            .replace(/[đĐ]/g, 'd') // Replace Vietnamese 'd'
+            .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+            .replace(/\s+/g, '-') // Replace spaces with -
+            .replace(/-+/g, '-') // Replace multiple - with single -
+            .trim(); // Trim - from start and end of text
     };
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

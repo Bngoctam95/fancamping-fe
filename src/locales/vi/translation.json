@@ -50,14 +50,6 @@
         "not_found": "Không tìm thấy tài khoản",
         "invalid_password": "Mật khẩu không chính xác"
     },
-    "home": {
-        "hero": {
-            "title": "Khám phá Việt Nam",
-            "subtitle": "Thuê thiết bị, chia sẻ kinh nghiệm và khám phá những điểm cắm trại tuyệt vời trên toàn Việt Nam",
-            "rentEquipment": "Thuê Thiết Bị",
-            "joinCommunity": "Tham Gia Cộng Đồng"
-        }
-    },
     "admin": {
         "dashboard": "Bảng Điều Khiển",
         "manageUsers": "Quản Lý Tài Khoản",
@@ -68,5 +60,30 @@
         "profile": "Hồ Sơ",
         "settings": "Cài Dặt",
         "logout": "Đăng xuất"
+    },
+    "home": {
+        "hero": {
+            "title": "Khám phá Việt Nam",
+            "subtitle": "Thuê thiết bị, chia sẻ kinh nghiệm và khám phá những điểm cắm trại tuyệt vời trên toàn Việt Nam",
+            "rentEquipment": "Thuê Thiết Bị",
+            "joinCommunity": "Tham Gia Cộng Đồng"
+        }
+    },
+    "rental": {
+        "hero": {
+            "title": "Thuê Thiết Bị",
+            "subtitle": "Thuê thiết bị, chia sẻ kinh nghiệm và khám phá những điểm cắm trại tuyệt vời trên toàn Việt Nam"
+        }
+    },
+    "equipment": {
+        "featured": {
+            "title": "Thiết Bị Cắm Trại Nổi Bật",
+            "subtitle": "Thiết bị cắm trại cao cấp có sẵn cho thuê",
+            "noEquipment": "Không tìm thấy thiết bị phù hợp với tiêu chí của bạn.",
+            "viewAll": "Xem Tất Cả Thiết Bị",
+            "day": "ngày",
+            "rentNow": "Thuê Ngay",
+            "reviews": "đánh giá"
+        }
     }
 }

@@ -13,11 +13,14 @@
 
     :root {
         --primary-color: #111827; /* Dark Gray */
+        --primary-hover-color: rgba(17, 24, 39, 0.8); /* Dark Gray with opacity for hover */
         --secondary-color: #50b7e7; /* Light Blue */
         --secondary-hover-color: rgba(80, 183, 231, 0.8); /* Light Blue with opacity for hover */
-        --campfire-color: #ffad33; /* Campfire Yellow */
-        --camfire-hover-color: rgba(255, 173, 51, 0.8); /* Campfire Yellow with opacity for hover */
+        --campfire-color: #D86C4F; /* Campfire Orange */
+        --camfire-hover-color: rgba(216, 108, 79, 0.8); /* Campfire Orange with opacity for hover */
         --canvas-color: #F4F1DE; /* Light Beige for canvas */
+        --button-color: #7C9885; /* Sage Green */
+        --button-hover-color: rgba(124, 152, 133, 0.8); /* Sage Green with opacity for hover */
         --dropdown-bg: #1f2937; /* Darker Gray for dropdowns */
         --text-campfire: #D86C4F; /* Campfire Orange */
         --text-sage: #7C9885; /* Sage Green */
@@ -62,6 +65,10 @@
         background-color: var(--primary-color);
     }
 
+    .bg-primary-hover {
+        background-color: var(--primary-hover-color);
+    }
+
     .bg-secondary {
         background-color: var(--secondary-color);
     }
@@ -85,7 +92,15 @@
     .bg-canvas {
         background-color: var(--canvas-color);
     }
-    
+
+    .bg-button {
+        background-color: var(--button-color);
+    }
+
+    .bg-button-hover {
+        background-color: var(--button-hover-color);
+    }
+
     .text-primary {
         color: var(--primary-color);
     }

@@ -2,10 +2,12 @@ import { getProductsAPI } from 'services/api';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RentalCard from 'components/rental/card';
+import { useTranslation } from 'react-i18next';
 
 const FeaturedEquipment = () => {
     const [isLoadingEquipment, setIsLoadingEquipment] = useState<boolean>(true);
     const [filteredEquipment, setFilteredEquipment] = useState<IProductTable[]>([]);
+    const { t } = useTranslation();
 
     const fetchEquipment = async () => {
         const query = 'page=1&limit=6';
@@ -29,10 +31,10 @@ const FeaturedEquipment = () => {
             <div className="container mx-auto px-6">
                 <div className="flex justify-between items-end mb-10">
                     <div>
-                        <h2 className="font-montserrat font-bold text-primary text-3xl mb-2">Featured Equipment</h2>
-                        <p className="font-opensans text-primary text-base">
-                            High-quality camping gear available for rent
-                        </p>
+                        <h2 className="font-montserrat font-bold text-primary text-3xl mb-2">
+                            {t('equipment.featured.title')}
+                        </h2>
+                        <p className="font-opensans text-primary text-base">{t('equipment.featured.subtitle')}</p>
                     </div>
                 </div>
 
@@ -64,7 +66,7 @@ const FeaturedEquipment = () => {
                     </div>
                 ) : (
                     <div className="text-center py-8">
-                        <p className="text-lg text-gray-600">No equipment found matching your criteria.</p>
+                        <p className="text-lg text-gray-600">{t('equipment.featured.noEquipment')}</p>
                     </div>
                 )}
 
@@ -73,7 +75,9 @@ const FeaturedEquipment = () => {
                         to="/rental"
                         className="inline-flex items-center text-forest hover:text-campfire font-semibold font-montserrat"
                     >
-                        View All Equipment <span className="ml-2">→</span>
+                        <button className="bg-primary hover:bg-primary-hover font-montserrat text-white font-semibold text-sm px-4 py-3 rounded-md">
+                            {t('equipment.featured.viewAll')} <span className="ml-2">→</span>
+                        </button>
                     </Link>
                 </div>
             </div>

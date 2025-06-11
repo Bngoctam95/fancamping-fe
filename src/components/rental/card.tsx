@@ -1,5 +1,5 @@
-import { Button } from 'antd';
 import { Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 interface RentalCardProps {
@@ -7,17 +7,17 @@ interface RentalCardProps {
 }
 
 const RentalCard = ({ equipment }: RentalCardProps) => {
-    // Format price from cents to dollars
+    const { t } = useTranslation();
+
     const formatPrice = (cents: number) => {
-        return `$${(cents / 100).toFixed(2)}`;
-    }; // Format rating from 0-500 to 0-5 stars
+        return `${(cents / 100).toFixed(2)} VND`;
+    };
     const formatRating = (rating: number | undefined) => {
         if (!rating) return 0;
         return (rating / 100).toFixed(1);
     };
 
-    // Truncate text if it's longer than 50 characters
-    const truncateText = (text: string, maxLength: number = 120) => {
+    const truncateText = (text: string, maxLength: number = 100) => {
         return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
     };
 
@@ -33,21 +33,24 @@ const RentalCard = ({ equipment }: RentalCardProps) => {
                     loading="lazy"
                 />
                 <div className="absolute top-4 right-4 bg-campfire text-white text-sm font-semibold py-1 px-3 rounded-full">
-                    {formatPrice(equipment.price)}/day
+                    {formatPrice(equipment.price)}/{t('equipment.featured.day')}
                 </div>
             </div>
             <div className="p-6">
-                <h3 className="text-xl font-semibold font-montserrat mb-2">{equipment.name}</h3>
-                <p className="text-charcoal mb-4">{truncateText(equipment.description)}</p>
+                <h3 className="font-montserrat font-bold text-primary text-lg mb-2">{equipment.name}</h3>
+                <p className="text-base mb-4 text-gray-700">{truncateText(equipment.shortDescription)}</p>
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                        <span className="text-sm text-gray-600">
+                        <span className="flex items-center text-sm text-gray-600">
                             <Star className="inline mr-1 h-4 w-4 fill-yellow-500 text-yellow-500" />
-                            {formatRating(equipment.ratings.average)} ({equipment.ratings.count} reviews)
+                            {formatRating(equipment.ratings.average)} ({equipment.ratings.count}{' '}
+                            {t('equipment.featured.reviews')})
                         </span>
                     </div>
                     <Link to={`/rentals/${equipment._id}`}>
-                        <Button className="bg-forest hover:bg-opacity-90 font-montserrat">Rent Now</Button>
+                        <button className="bg-button hover:bg-button-hover font-montserrat text-white font-semibold text-sm px-4 py-2 rounded-md">
+                            {t('equipment.featured.rentNow')}
+                        </button>
                     </Link>
                 </div>
             </div>
