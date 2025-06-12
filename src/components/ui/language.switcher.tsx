@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 import i18n from '@/i18n';
 
 const LanguageSwitcher = () => {
@@ -66,7 +66,15 @@ const LanguageSwitcher = () => {
                             <span className="flex-1 text-left">Tiếng Việt</span>
                             <div className="flex-shrink-0 ml-4">
                                 {getActiveLanguage('vi') && (
-                                    <svg className="h-4 w-4 text-blue-500" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg
+                                        className="h-4 w-4 text-blue-500"
+                                        fill="none"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
                                         <path d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 )}
@@ -81,7 +89,15 @@ const LanguageSwitcher = () => {
                             <span className="flex-1 text-left">English</span>
                             <div className="flex-shrink-0 ml-8">
                                 {getActiveLanguage('en') && (
-                                    <svg className="h-4 w-4 text-blue-500" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg
+                                        className="h-4 w-4 text-blue-500"
+                                        fill="none"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
                                         <path d="M5 13l4 4L19 7"></path>
                                     </svg>
                                 )}

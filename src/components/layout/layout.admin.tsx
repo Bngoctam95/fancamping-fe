@@ -5,8 +5,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useCurrentApp } from 'hooks/useCurrentApp';
 import { logoutAPI } from 'services/api';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from 'components/ui/language.switcher';
-import { BookOutlined, DashboardOutlined, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ProductOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, DashboardOutlined, HomeOutlined, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ProductOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Tent } from 'lucide-react';
 
 const { Header, Content, Sider } = Layout;
@@ -141,7 +140,19 @@ const LayoutAdmin = () => {
                                 alignItems: 'center',
                                 gap: 10,
                             }}
-                        >
+                        >                            
+                        <Avatar  
+                            style={{
+                                cursor: 'pointer',
+                                transition: 'background-color 0.3s',
+                            }}
+                            className="hover:bg-blue-500"
+                            shape="square"
+                            size={40} 
+                            icon={<HomeOutlined />} 
+                            onClick={() => navigate('/')}
+                        />
+                            
                             <Dropdown
                                 menu={{
                                     items: profileDropdownItems,
@@ -150,12 +161,14 @@ const LayoutAdmin = () => {
                                 trigger={['click']}
                                 placement="bottomRight"
                                 arrow
-                            >
+                            >                                
                                 <Avatar
                                     style={{
                                         cursor: 'pointer',
                                         marginRight: 20,
+                                        transition: 'background-color 0.3s',
                                     }}
+                                    className="hover:bg-blue-500"
                                     shape="square"
                                     size={40}
                                     icon={<UserOutlined />}

@@ -1,10 +1,15 @@
-import { Modal, Form, Input, Row, Col, Divider, Button, InputNumber, Select, Upload, App } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { getEquipmentCategoriesAPI, updateProductAPI, uploadProductSliderAPI, uploadProductThumbnailAPI } from "services/api";
-import type { FormProps, GetProp, UploadFile, UploadProps } from "antd/lib";
+import { Modal, Form, Input, Row, Col, Divider, Button, InputNumber, Select, Upload, App, Image } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import {
+    getEquipmentCategoriesAPI,
+    updateProductAPI,
+    uploadProductSliderAPI,
+    uploadProductThumbnailAPI,
+} from 'services/api';
+import type { FormProps, GetProp, UploadFile, UploadProps } from 'antd/lib';
 import { v4 as uuidv4 } from 'uuid';
-import type { UploadChangeParam } from "antd/lib/upload";
+import type { UploadChangeParam } from 'antd/lib/upload';
 
 interface IUpdateProductProps {
     openUpdateProduct: boolean;
@@ -29,11 +34,14 @@ type FieldType = {
     slider: UploadFile[];
 };
 
-const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate, refreshTable }: IUpdateProductProps) => {
-
+const UpdateProduct = ({
+    openUpdateProduct,
+    setOpenUpdateProduct,
+    productUpdate,
+    refreshTable,
+}: IUpdateProductProps) => {
     const [form] = Form.useForm();
     const { message } = App.useApp();
-    const [loading, setLoading] = useState(false);
     const [loadingThumbnail, setLoadingThumbnail] = useState(false);
     const [loadingSlider, setLoadingSlider] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -68,19 +76,18 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
                     uid: uuidv4(),
                     name: productUpdate.thumbnail,
                     status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${productUpdate.thumbnail}`
+                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${productUpdate.thumbnail}`,
+                },
+            ];
 
-                }
-            ]
-
-            const arrSlider = productUpdate?.slider?.map(item => {
+            const arrSlider = productUpdate?.slider?.map((item) => {
                 return {
                     uid: uuidv4(),
                     name: item,
                     status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${item}`
-                }
-            })
+                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${item}`,
+                };
+            });
 
             form.setFieldsValue({
                 _id: productUpdate._id,
@@ -93,7 +100,7 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
                 categoryId: productUpdate.categoryId._id,
                 inventory: productUpdate.inventory.total,
                 thumbnail: arrThumbnail,
-                slider: arrSlider
+                slider: arrSlider,
             });
 
             setFileListThumbnail(arrThumbnail as any);
@@ -115,7 +122,7 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
             reader.onload = () => resolve(reader.result as string);
             reader.onerror = (error) => reject(error);
         });
-    }
+    };
 
     const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
         const { _id, name, slug, description, shortDescription, tags, price, inventory, categoryId } = values;
@@ -144,7 +151,7 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
             inventoryData,
             thumbnailName,
             sliderNames
-        )
+        );
 
         if (res?.data) {
             //success
@@ -157,7 +164,7 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
             message.error(res.message);
         }
         setLoadingSubmit(false);
-    }
+    };
 
     const normFile = (e: any) => {
         if (Array.isArray(e)) {
@@ -168,49 +175,53 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
 
     const handleUploadFileThumbnail = async (options: any) => {
         const { file, onSuccess, onError } = options;
-        try {
-            const res = await uploadProductThumbnailAPI(file);
-            if (res?.data) {
-                const uploadFile: UploadFile = {
-                    uid: file.uid,
-                    name: res.data,
-                    status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${res.data}`
-                }
-                setFileListThumbnail([{ ...uploadFile }]);
-                if (onSuccess) onSuccess("ok");
-            } else {
-                if (onError) onError(new Error(res.message || 'Upload failed'));
-                message.error(res.message || 'Upload failed');
-            }
-        } catch (error: any) {
-            if (onError) onError(error);
-            message.error(error.message || 'Upload failed');
+        const res = await uploadProductThumbnailAPI(file);
+        if (res?.data) {
+            const uploadFile: UploadFile = {
+                uid: file.uid,
+                name: res.data,
+                status: 'done',
+                url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${res.data}`,
+            };
+            setFileListThumbnail([{ ...uploadFile }]);
+            if (onSuccess) onSuccess('ok');
+        } else {
+            if (onError) onError(new Error(res.message || 'Upload failed'));
+            message.error(res.message || 'Upload failed');
         }
-    }
+    };    
 
     const beforeUploadThumbnail = (file: FileType) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
+        const isValidFormat = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp';
+        if (!isValidFormat) {
+            message.error('You can only upload JPG/PNG/WebP file!');
+            return Upload.LIST_IGNORE;
         }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
             message.error('Image must smaller than 2MB!');
+            return Upload.LIST_IGNORE;
         }
-        return isJpgOrPng && isLt2M;
-    }
+        return isValidFormat && isLt2M;
+    };
 
     const handleChangeThumbnail = (info: UploadChangeParam) => {
+        setLoadingThumbnail(true);
+        console.log('info.file.status', info.file.status);
         if (info.file.status === 'done') {
-            setLoadingThumbnail(true);
+            setLoadingThumbnail(false);
             return;
         }
         if (info.file.status === 'error') {
             setLoadingThumbnail(false);
             return;
         }
-    }
+
+        if (info.file.status === 'removed') {
+            setLoadingThumbnail(false);
+            return;
+        }
+    };
 
     const handlePreviewThumbnail = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -218,57 +229,61 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
         }
         setPreviewImage(file.url || (file.preview as string));
         setPreviewOpen(true);
-    }
+    };
 
     const handleRemoveThumbnail = () => {
         setFileListThumbnail([]);
-    }
+    };
 
     const handleUploadFileSlider = async (options: any) => {
         const { file, onSuccess, onError } = options;
-        try {
-            const res = await uploadProductSliderAPI([file]); // Pass as array since API expects File[]
-            if (res?.data) {
-                const uploadFile: UploadFile = {
-                    uid: file.uid,
-                    name: res.data[0], // Take first item since we only upload one file at a time
-                    status: 'done',
-                    url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${res.data[0]}`
-                }
-                setFileListSlider((prevState) => [...prevState, { ...uploadFile }]);
-                if (onSuccess) onSuccess("ok");
-            } else {
-                if (onError) onError(new Error(res.message || 'Upload failed'));
-                message.error(res.message || 'Upload failed');
-            }
-        } catch (error: any) {
-            if (onError) onError(error);
-            message.error(error.message || 'Upload failed');
+        const res = await uploadProductSliderAPI([file]);
+        if (res?.data) {
+            const uploadFile: UploadFile = {
+                uid: file.uid,
+                name: res.data[0],
+                status: 'done',
+                url: `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${res.data[0]}`,
+            };
+            setFileListSlider((prevState) => [...prevState, { ...uploadFile }]);
+            if (onSuccess) onSuccess('ok');
+        } else {
+            if (onError) onError(new Error(res.message || 'Upload failed'));
+            message.error(res.message || 'Upload failed');
         }
-    }
-
+    };    
+    
     const beforeUploadSlider = (file: FileType) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG/PNG file!');
+        const isValidFormat = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp';
+        if (!isValidFormat) {
+            message.error('You can only upload JPG/PNG/WebP file!');
+            return Upload.LIST_IGNORE;
         }
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isLt5M) {
             message.error('Image must smaller than 5MB!');
+            return Upload.LIST_IGNORE;
         }
-        return isJpgOrPng && isLt5M;
-    }
+        return isValidFormat && isLt5M;
+    };
 
     const handleChangeSlider = (info: any) => {
+        setLoadingSlider(true);
+
         if (info.file.status === 'done') {
-            setLoadingSlider(true);
+            setLoadingSlider(false);
             return;
         }
         if (info.file.status === 'error') {
             setLoadingSlider(false);
             return;
         }
-    }
+
+        if (info.file.status === 'removed') {
+            setLoadingSlider(false);
+            return;
+        }
+    };
 
     const handlePreviewSlider = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -276,11 +291,11 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
         }
         setPreviewImage(file.url || (file.preview as string));
         setPreviewOpen(true);
-    }
+    };
 
     const handleRemoveSlider = (file: UploadFile) => {
         setFileListSlider(fileListSlider.filter((f) => f.uid !== file.uid));
-    }
+    };
 
     return (
         <Modal
@@ -294,12 +309,7 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
             <Divider></Divider>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Row gutter={[16, 16]}>
-                    <Form.Item
-                        labelCol={{ span: 24 }}
-                        label="_id"
-                        name="_id"
-                        hidden
-                    >
+                    <Form.Item labelCol={{ span: 24 }} label="_id" name="_id" hidden>
                         <Input />
                     </Form.Item>
                     <Col span={12}>
@@ -416,11 +426,19 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
                                 onPreview={handlePreviewThumbnail}
                                 onRemove={handleRemoveThumbnail}
                                 fileList={fileListThumbnail}
-
                             >
                                 <div>
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                    {loadingThumbnail ? (
+                                        <>
+                                            <LoadingOutlined />
+                                            <div style={{ marginTop: 8 }}>Uploading...</div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <PlusOutlined />
+                                            <div style={{ marginTop: 8 }}>Upload</div>
+                                        </>
+                                    )}
                                 </div>
                             </Upload>
                         </Form.Item>
@@ -448,8 +466,17 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
                                 fileList={fileListSlider}
                             >
                                 <div>
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                    {loadingSlider ? (
+                                        <>
+                                            <LoadingOutlined />
+                                            <div style={{ marginTop: 8 }}>Uploading...</div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <PlusOutlined />
+                                            <div style={{ marginTop: 8 }}>Upload</div>
+                                        </>
+                                    )}
                                 </div>
                             </Upload>
                         </Form.Item>
@@ -462,8 +489,19 @@ const UpdateProduct = ({ openUpdateProduct, setOpenUpdateProduct, productUpdate,
                     </Button>
                 </Form.Item>
             </Form>
+            {previewImage && (
+                <Image
+                    wrapperStyle={{ display: 'none' }}
+                    preview={{
+                        visible: previewOpen,
+                        onVisibleChange: (visible) => setPreviewOpen(visible),
+                        afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                    }}
+                    src={previewImage}
+                />
+            )}
         </Modal>
-    )
-}
+    );
+};
 
 export default UpdateProduct;

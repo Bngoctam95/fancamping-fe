@@ -41,6 +41,24 @@ const CreateCategory = ({ openCreateCategory, setOpenCreateCategory, refreshTabl
         setLoading(false);
     };
 
+    const generateSlug = (text: string): string => {
+        return text
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+            .replace(/[đĐ]/g, 'd')           // Replace Vietnamese 'd'
+            .replace(/[^a-z0-9\s-]/g, '')    // Remove special characters
+            .replace(/\s+/g, '-')            // Replace spaces with -
+            .replace(/-+/g, '-')             // Replace multiple - with single -
+            .trim();                         // Trim - from start and end of text
+    };
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.value;
+        const slug = generateSlug(name);
+        form.setFieldValue('slug', slug);
+    };
+
     return (
         <Modal
             title='Tạo mới danh mục'
@@ -61,7 +79,7 @@ const CreateCategory = ({ openCreateCategory, setOpenCreateCategory, refreshTabl
                     name="name"
                     rules={[{ required: true, message: 'Vui lòng nhập tên danh mục' }]}
                 >
-                    <Input id="modal_name" />
+                    <Input id="modal_name" onChange={handleNameChange} />
                 </Form.Item>
 
                 {/* Email */}

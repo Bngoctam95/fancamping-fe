@@ -22,6 +22,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import ManaProductPage from 'pages/admin/manage.product';
 import ManaCategoryPage from 'pages/admin/manage.category';
 import viVN from 'antd/locale/vi_VN';
+import RentalDetailPage from 'pages/client/rental.detail';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: '/rental',
                 element: <RentalPage />,
+            },
+            {
+                path: '/rental/:id',
+                element: <RentalDetailPage />,
             },
             {
                 path: '/blog',

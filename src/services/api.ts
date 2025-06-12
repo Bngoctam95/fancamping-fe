@@ -65,6 +65,11 @@ export const getProductsAPI = (query: string) => {
     return axios.get<IBackendRes<IModelPaginate<IProductTable>>>(urlBackend);
 };
 
+export const getProductDetailAPI = (_id: string) => {
+    const urlBackend = `products/${_id}`;
+    return axios.get<IBackendRes<IProductTable>>(urlBackend);
+};
+
 export const deleteProductAPI = (_id: string) => {
     const urlBackend = `products/${_id}`;
     return axios.delete<IBackendRes<IProductTable>>(urlBackend);
