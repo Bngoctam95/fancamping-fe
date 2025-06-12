@@ -189,7 +189,7 @@ const UpdateProduct = ({
             if (onError) onError(new Error(res.message || 'Upload failed'));
             message.error(res.message || 'Upload failed');
         }
-    };    
+    };
 
     const beforeUploadThumbnail = (file: FileType) => {
         const isValidFormat = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp';
@@ -197,12 +197,12 @@ const UpdateProduct = ({
             message.error('You can only upload JPG/PNG/WebP file!');
             return Upload.LIST_IGNORE;
         }
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+            message.error('Image must smaller than 5MB!');
             return Upload.LIST_IGNORE;
         }
-        return isValidFormat && isLt2M;
+        return isValidFormat && isLt5M;
     };
 
     const handleChangeThumbnail = (info: UploadChangeParam) => {
@@ -251,8 +251,8 @@ const UpdateProduct = ({
             if (onError) onError(new Error(res.message || 'Upload failed'));
             message.error(res.message || 'Upload failed');
         }
-    };    
-    
+    };
+
     const beforeUploadSlider = (file: FileType) => {
         const isValidFormat = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp';
         if (!isValidFormat) {

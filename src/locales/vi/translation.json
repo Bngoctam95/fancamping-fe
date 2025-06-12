@@ -91,6 +91,27 @@
             "priceHighLow": "Giá: Cao đến Thấp",
             "rating": "Đánh Giá",
             "search": "Tìm kiếm thiết bị..."
+        },
+        "detail": {
+            "equipmentNotFound": "Không tìm thấy thiết bị",
+            "backToRentals": "Quay về trang thuê thiết bị",
+            "day": "ngày",
+            "reviews": "đánh giá",
+            "description": "Mô tả",
+            "features": "Tính năng",
+            "rentThisEquipment": "Thuê Thiết Bị Này",
+            "selectRentalDatesAndOptions": "Chọn ngày thuê và tùy chọn",
+            "selectDateRange": "Chọn Khoảng Thời Gian",
+            "additionalOptions": "Tùy Chọn Bổ Sung",
+            "baseRate": "Giá Cơ Bản",
+            "addOns": "Tùy Chọn Bổ Sung",
+            "total": "Tổng",
+            "rentNow": "Thuê Ngay",
+            "rentalPolicies": "Chính Sách Thuê",
+            "depositRequired": "Yêu cầu ký quỹ (hoàn trả được)",
+            "idVerificationRequired": "Yêu cầu xác thực ID khi nhận thiết bị",
+            "equipmentMustBeReturned": "Thiết bị phải được trả lại trong điều kiện gốc",
+            "cancellationUpTo48Hours": "Hủy bỏ tối đa 48 giờ trước để được hoàn trả đầy đủ"
         }
     }
 }

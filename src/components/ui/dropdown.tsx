@@ -51,7 +51,7 @@ const DropdownDefault = ({
     };
 
     return (
-        <div className="relative inline-block" ref={dropdownRef}>
+        <div className="relative block" ref={dropdownRef}>
             <button
                 onClick={toggleDropdown}
                 className={`flex items-center justify-between gap-2 bg-[#e6e2db] ${className} rounded py-2 px-3 text-gray-700 text-base cursor-pointer`}
@@ -77,7 +77,7 @@ const DropdownDefault = ({
                                 onClick={() => handleClick(option)}
                                 onMouseEnter={() => setHoveredOption(option._id)}
                                 onMouseLeave={() => setHoveredOption(null)}
-                                className={`flex items-center justify-between w-full px-2 py-2 text-base text-gray-700 rounded hover:bg-button hover:text-white transition-colors duration-150 ${getActiveOption(option) ? 'bg-button text-white' : ''}`}
+                                className={`flex items-center justify-between w-full px-2 py-2 text-base text-gray-700 rounded hover:bg-neutral-400 hover:text-white transition-colors duration-150 ${getActiveOption(option) ? 'bg-neutral-400 text-white' : ''}`}
                             >
                                 <span className="flex-1 text-left">{option.text}</span>
                                 <div className="flex-shrink-0 ml-4">

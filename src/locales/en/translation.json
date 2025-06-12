@@ -91,6 +91,27 @@
             "priceHighLow": "Price: High to Low",
             "rating": "Rating",
             "search": "Search equipment..."
+        },
+        "detail": {
+            "equipmentNotFound": "Equipment not found",
+            "backToRentals": "Back to Rentals",
+            "day": "day",
+            "reviews": "reviews",
+            "description": "Description",
+            "features": "Features",
+            "rentThisEquipment": "Rent This Equipment",
+            "selectRentalDatesAndOptions": "Select rental dates and options",
+            "selectDateRange": "Select Date Range",
+            "additionalOptions": "Additional Options",
+            "baseRate": "Base Rate",
+            "addOns": "Add-ons",
+            "total": "Total",
+            "rentNow": "Rent Now",
+            "rentalPolicies": "Rental Policies",
+            "depositRequired": "Deposit required (refundable)",
+            "idVerificationRequired": "ID verification required at pickup",
+            "equipmentMustBeReturned": "Equipment must be returned in original condition",
+            "cancellationUpTo48Hours": "Cancellation up to 48 hours before for full refund"
         }
     }
 }

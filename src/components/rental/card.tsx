@@ -9,9 +9,10 @@ interface RentalCardProps {
 const RentalCard = ({ equipment }: RentalCardProps) => {
     const { t } = useTranslation();
 
-    const formatPrice = (cents: number) => {
-        return `${(cents / 100).toFixed(2)} VND`;
+    const formatPrice = (price: number) => {
+        return `${price.toLocaleString('vi-VN')} VND`;
     };
+
     const formatRating = (rating: number | undefined) => {
         if (!rating) return 0;
         return (rating / 100).toFixed(1);
