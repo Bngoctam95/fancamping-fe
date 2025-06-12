@@ -9,12 +9,12 @@ const DropdownDefault = ({
     options,
     onSelect,
     value,
-    width,
+    className,
 }: {
     options: DropdownOption[];
     onSelect: (option: DropdownOption) => void;
     value: string;
-    width: string;
+    className?: string;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -54,7 +54,7 @@ const DropdownDefault = ({
         <div className="relative inline-block" ref={dropdownRef}>
             <button
                 onClick={toggleDropdown}
-                className={`flex items-center justify-between gap-2 bg-[#e6e2db] w-[${width}] rounded py-2 px-3 text-gray-700 text-base cursor-pointer`}
+                className={`flex items-center justify-between gap-2 bg-[#e6e2db] ${className} rounded py-2 px-3 text-gray-700 text-base cursor-pointer`}
             >
                 <span>{value}</span>
                 <svg
@@ -68,7 +68,7 @@ const DropdownDefault = ({
 
             {isOpen && (
                 <div
-                    className={`absolute mt-1 w-[${width}] rounded-md bg-white border border-gray-300 shadow-xl animate-fadeIn z-10 `}
+                    className={`absolute mt-1 ${className} rounded-md bg-white border border-gray-300 shadow-xl animate-fadeIn z-10 `}
                 >
                     <div className="py-1 px-1">
                         {options.map((option) => (

@@ -83,7 +83,14 @@
             "viewAll": "View All Equipment",
             "day": "day",
             "rentNow": "Rent Now",
-            "reviews": "reviews"
+            "reviews": "reviews",
+            "rentals": "Equipment Rentals",
+            "allCategories": "All Categories",
+            "default": "Default",
+            "priceLowHigh": "Price: Low to High",
+            "priceHighLow": "Price: High to Low",
+            "rating": "Rating",
+            "search": "Search equipment..."
         }
     }
 }

@@ -47,7 +47,7 @@ const RentalCard = ({ equipment }: RentalCardProps) => {
                             {t('equipment.featured.reviews')})
                         </span>
                     </div>
-                    <Link to={`/rentals/${equipment._id}`}>
+                    <Link to={`/rental/${equipment._id}`}>
                         <button className="bg-button hover:bg-button-hover font-montserrat text-white font-semibold text-sm px-4 py-2 rounded-md">
                             {t('equipment.featured.rentNow')}
                         </button>

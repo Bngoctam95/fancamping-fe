@@ -83,7 +83,14 @@
             "viewAll": "Xem Tất Cả Thiết Bị",
             "day": "ngày",
             "rentNow": "Thuê Ngay",
-            "reviews": "đánh giá"
+            "reviews": "đánh giá",
+            "rentals": "Thuê Thiết Bị",
+            "allCategories": "Tất Cả Danh Mục",
+            "default": "Mặc Định",
+            "priceLowHigh": "Giá: Thấp đến Cao",
+            "priceHighLow": "Giá: Cao đến Thấp",
+            "rating": "Đánh Giá",
+            "search": "Tìm kiếm thiết bị..."
         }
     }
 }
