@@ -96,6 +96,7 @@
             "equipmentNotFound": "Không tìm thấy thiết bị",
             "backToRentals": "Quay về trang thuê thiết bị",
             "day": "ngày",
+            "days": "ngày",
             "reviews": "đánh giá",
             "description": "Mô tả",
             "features": "Tính năng",
@@ -111,7 +112,9 @@
             "depositRequired": "Yêu cầu ký quỹ (hoàn trả được)",
             "idVerificationRequired": "Yêu cầu xác thực ID khi nhận thiết bị",
             "equipmentMustBeReturned": "Thiết bị phải được trả lại trong điều kiện gốc",
-            "cancellationUpTo48Hours": "Hủy bỏ tối đa 48 giờ trước để được hoàn trả đầy đủ"
+            "cancellationUpTo48Hours": "Hủy bỏ tối đa 48 giờ trước để được hoàn trả đầy đủ",
+            "quantity": "Số lượng",
+            "items": "cái"
         }
     }
 }
