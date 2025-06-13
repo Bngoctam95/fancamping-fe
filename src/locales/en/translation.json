@@ -96,6 +96,7 @@
             "equipmentNotFound": "Equipment not found",
             "backToRentals": "Back to Rentals",
             "day": "day",
+            "days": "days",
             "reviews": "reviews",
             "description": "Description",
             "features": "Features",
@@ -111,7 +112,9 @@
             "depositRequired": "Deposit required (refundable)",
             "idVerificationRequired": "ID verification required at pickup",
             "equipmentMustBeReturned": "Equipment must be returned in original condition",
-            "cancellationUpTo48Hours": "Cancellation up to 48 hours before for full refund"
+            "cancellationUpTo48Hours": "Cancellation up to 48 hours before for full refund",
+            "quantity": "Quantity",
+            "items": "items"
         }
     }
 }

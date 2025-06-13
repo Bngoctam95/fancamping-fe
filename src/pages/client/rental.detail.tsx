@@ -1,12 +1,13 @@
 import { Helmet } from 'react-helmet-async';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { getProductDetailAPI } from '@/services/api';
-import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Minus, Plus, Star } from 'lucide-react';
+import { ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Loader2, Minus, Package, Plus, Star } from 'lucide-react';
 import { DatePicker } from 'antd';
 import type { Dayjs } from 'dayjs';
 import DropdownDefault from 'components/ui/dropdown';
+import { useCurrentApp } from 'hooks/useCurrentApp';
 
 interface DropdownOption {
     _id: string;
@@ -14,26 +15,30 @@ interface DropdownOption {
 }
 
 const RentalDetailPage = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
     const { t } = useTranslation();
+    const { isAuthenticated } = useCurrentApp();
     const { RangePicker } = DatePicker;
     const [productDetail, setProductDetail] = useState<IProductTable | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null]);
     const [selectedAddons, setSelectedAddons] = useState<string>('Bảo vệ thiệt hại (+200.000đ/ngày)');
+    const [rentalQuantity, setRentalQuantity] = useState(0);
 
     const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${productDetail?.thumbnail}`;
 
-    const productImages = productDetail ? [
-        urlThumbnail, // Always include thumbnail as first image
-        ...(productDetail.slider && productDetail.slider.length > 0
-            ? productDetail.slider.map((sliderItem) =>
-                `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${sliderItem}`
-            )
-            : []
-        )
-    ] : [];
+    const productImages = productDetail
+        ? [
+              urlThumbnail, // Always include thumbnail as first image
+              ...(productDetail.slider && productDetail.slider.length > 0
+                  ? productDetail.slider.map(
+                        (sliderItem) => `${import.meta.env.VITE_BACKEND_URL}uploads/products/slider/${sliderItem}`
+                    )
+                  : []),
+          ]
+        : [];
 
     useEffect(() => {
         const fetchProductDetail = async () => {
@@ -54,15 +59,22 @@ const RentalDetailPage = () => {
         setSelectedAddons(option.text);
     };
 
-    const handleDateRangeChange = (
-        dates: [Dayjs | null, Dayjs | null] | null,
-        dateStrings: [string, string]
-    ) => {
+    const handleDateRangeChange = (dates: [Dayjs | null, Dayjs | null] | null, dateStrings: [string, string]) => {
         if (dates) {
             setDateRange(dates);
         } else {
             setDateRange([null, null]);
         }
+    };
+
+    const incrementQuantity = () => {
+        if (!productDetail) return;
+
+        setRentalQuantity((prev) => (prev < productDetail.inventory.available ? prev + 1 : prev));
+    };
+
+    const decrementQuantity = () => {
+        setRentalQuantity((prev) => Math.max(prev - 1, 0));
     };
 
     const nextImage = () => {
@@ -87,6 +99,14 @@ const RentalDetailPage = () => {
             return () => clearInterval(interval);
         }
     }, [productImages.length]);
+
+    const handleRentNow = () => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        } else {
+            console.log('Rent now');
+        }
+    };
 
     if (isLoading) {
         return (
@@ -122,7 +142,7 @@ const RentalDetailPage = () => {
                 <meta property="og:description" content={t('rental.hero.subtitle')} />
                 <meta property="og:type" content="website" />
             </Helmet>
-            <div className="bg-canvas py-12">
+            <div className="bg-canvas py-6">
                 <div className="container mx-auto px-6">
                     <Link to="/rental">
                         <button className="bg-button flex items-center justify-center hover:bg-button-hover font-montserrat text-white font-semibold text-sm px-4 py-3 mb-6 rounded-md">
@@ -184,10 +204,11 @@ const RentalDetailPage = () => {
                                                 <button
                                                     key={index}
                                                     onClick={() => goToImage(index)}
-                                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentImageIndex
-                                                        ? 'bg-white scale-125'
-                                                        : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-                                                        }`}
+                                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                                        index === currentImageIndex
+                                                            ? 'bg-white scale-125'
+                                                            : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                                                    }`}
                                                     aria-label={`Go to image ${index + 1}`}
                                                 />
                                             ))}
@@ -203,10 +224,11 @@ const RentalDetailPage = () => {
                                                 <button
                                                     key={index}
                                                     onClick={() => goToImage(index)}
-                                                    className={`flex-shrink-0 w-36 aspect-[16/9] rounded-lg overflow-hidden border-2 transition-all duration-200 ${index === currentImageIndex
-                                                        ? 'border-forest shadow-md'
-                                                        : 'border-gray-300 hover:border-gray-400'
-                                                        }`}
+                                                    className={`flex-shrink-0 w-36 aspect-[16/9] rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                                                        index === currentImageIndex
+                                                            ? 'border-forest shadow-md'
+                                                            : 'border-gray-300 hover:border-gray-400'
+                                                    }`}
                                                 >
                                                     <img
                                                         src={image}
@@ -225,9 +247,11 @@ const RentalDetailPage = () => {
                                             <h1 className="text-3xl font-bold font-montserrat text-forest mb-2">
                                                 {productDetail.name}
                                             </h1>
+
                                             <p className="text-sm mb-2 inline-block bg-neutral-200 rounded-full px-2 py-1">
                                                 Category: {productDetail.categoryId.name}
                                             </p>
+
                                             <div className="flex items-center">
                                                 <Star className="fill-yellow-500 text-yellow-500 h-5 w-5 mr-1" />
                                                 <span className="font-semibold mr-1">
@@ -244,12 +268,16 @@ const RentalDetailPage = () => {
                                     </div>
 
                                     <div className="border-t border-gray-200 pt-6 mt-6">
-                                        <h2 className="text-xl font-semibold font-montserrat mb-4">{t('equipment.detail.description')}</h2>
+                                        <h2 className="text-xl font-semibold font-montserrat mb-4">
+                                            {t('equipment.detail.description')}
+                                        </h2>
                                         <p className="text-gray-700">{productDetail.description}</p>
                                     </div>
 
                                     <div className="border-t border-gray-200 pt-6 mt-6">
-                                        <h2 className="text-xl font-semibold font-montserrat mb-4">{t('equipment.detail.features')}</h2>
+                                        <h2 className="text-xl font-semibold font-montserrat mb-4">
+                                            {t('equipment.detail.features')}
+                                        </h2>
                                         <ul className="list-disc list-inside space-y-2 text-gray-700">
                                             <li>Premium quality materials</li>
                                             <li>Easy setup and takedown</li>
@@ -264,31 +292,86 @@ const RentalDetailPage = () => {
 
                         {/* Rental Form */}
                         <div>
-                            <div className='bg-white rounded-lg shadow-md p-6'>
-                                <div>
-                                    <h2 className="text-xl font-bold font-montserrat mb-2">{t('equipment.detail.rentThisEquipment')}</h2>
-                                    <p className="text-gray-500">{t('equipment.detail.selectRentalDatesAndOptions')}</p>
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <h2 className="text-xl font-bold font-montserrat mb-2">
+                                            {t('equipment.detail.rentThisEquipment')}
+                                        </h2>
+                                        <p className="text-gray-500">
+                                            {t('equipment.detail.selectRentalDatesAndOptions')}
+                                        </p>
+                                    </div>
+                                    {productDetail.inventory.available > 0 ? (
+                                        <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                                            <span className="font-semibold">Hàng có sẵn</span>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-red-100 text-red-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                                            <span className="font-semibold">Hết hàng</span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium mb-2">{t('equipment.detail.selectDateRange')}</label>
-                                        <RangePicker
-                                            className='w-full'
-                                            onChange={handleDateRangeChange}
-                                        />
+                                        <label className="block text-sm font-medium mb-2">
+                                            {t('equipment.detail.selectDateRange')}
+                                        </label>
+                                        <RangePicker className="w-full" onChange={handleDateRangeChange} />
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+                                        <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                                            <Package className="h-4 w-4" />
+                                            <span className="font-semibold">Tổng:</span> {productDetail.inventory.total}
+                                        </div>
+                                        <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                                            <CheckCircle className="h-4 w-4" />
+                                            <span className="font-semibold">Có sẵn:</span>{' '}
+                                            {productDetail.inventory.available - rentalQuantity}
+                                        </div>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-2">{t('equipment.detail.additionalOptions')}</label>
+                                        <label className="block text-sm font-medium mb-2">
+                                            {t('equipment.detail.quantity')}
+                                        </label>
+                                        <div className="flex items-center space-x-3">
+                                            <button
+                                                className={`${rentalQuantity <= 0 ? 'bg-gray-100 text-gray-500' : 'bg-gray-200 text-gray-500 hover:bg-button-hover hover:text-white'} font-montserrat font-semibold text-sm px-4 py-3 rounded-md`}
+                                                onClick={decrementQuantity}
+                                                disabled={rentalQuantity <= 0}
+                                            >
+                                                <Minus className="h-4 w-4" />
+                                            </button>
+                                            <span className="w-8 text-center font-medium">{rentalQuantity}</span>
+                                            <button
+                                                className={`${rentalQuantity >= productDetail.inventory.available ? 'bg-gray-100 text-gray-500' : 'bg-gray-200 text-gray-500 hover:bg-button-hover hover:text-white'} font-montserrat font-semibold text-sm px-4 py-3 rounded-md`}
+                                                onClick={incrementQuantity}
+                                                disabled={rentalQuantity >= productDetail.inventory.available}
+                                            >
+                                                <Plus className="h-4 w-4" />
+                                            </button>
+                                            <span className="ml-2">{t('equipment.detail.items')}</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2">
+                                            {t('equipment.detail.additionalOptions')}
+                                        </label>
                                         <DropdownDefault
                                             options={[
                                                 { _id: 'damage-protection', text: 'Bảo vệ thiệt hại (+200.000đ/ngày)' },
                                                 { _id: 'cleaning-service', text: 'Dọn dẹp (+100.000đ)' },
-                                                { _id: 'delivery-to-location', text: 'Giao hàng đến địa điểm (+200.000đ)' },
+                                                {
+                                                    _id: 'delivery-to-location',
+                                                    text: 'Giao hàng đến địa điểm (+200.000đ)',
+                                                },
                                             ]}
                                             onSelect={handleAddonSelect}
                                             value={selectedAddons}
-                                            className='w-full'
+                                            className="w-full"
                                         />
                                     </div>
 
@@ -296,24 +379,27 @@ const RentalDetailPage = () => {
                                         <div className="flex justify-between mb-2">
                                             <span>{t('equipment.detail.baseRate')}</span>
                                             <span>
-                                                {formatPrice(productDetail.price)} ×
+                                                {formatPrice(productDetail.price)} ×{' '}
                                                 {dateRange[0] && dateRange[1]
                                                     ? dateRange[1].diff(dateRange[0], 'day') + 1
-                                                    : 0} days
+                                                    : 0}{' '}
+                                                {t('equipment.detail.days')} × {rentalQuantity}{' '}
+                                                {t('equipment.detail.items')}{' '}
                                             </span>
                                         </div>
                                         <div className="flex justify-between mb-2">
                                             <span>{t('equipment.detail.addOns')}</span>
-                                            <span>$0.00</span>
+                                            <span>{formatPrice(0)}</span>
                                         </div>
                                         <div className="flex justify-between font-semibold text-lg pt-2 border-t">
                                             <span>{t('equipment.detail.total')}</span>
                                             <span>
                                                 {formatPrice(
                                                     productDetail.price *
-                                                    (dateRange[0] && dateRange[1]
-                                                        ? dateRange[1].diff(dateRange[0], 'day') + 1
-                                                        : 0)
+                                                        (dateRange[0] && dateRange[1]
+                                                            ? dateRange[1].diff(dateRange[0], 'day') + 1
+                                                            : 0) *
+                                                        rentalQuantity
                                                 )}
                                             </span>
                                         </div>
@@ -322,7 +408,7 @@ const RentalDetailPage = () => {
                                 <div>
                                     <button
                                         className="w-full bg-button hover:bg-button-hover font-montserrat text-base font-semibold text-white px-4 py-3 rounded-md"
-                                        onClick={() => { }}
+                                        onClick={handleRentNow}
                                     >
                                         {t('equipment.detail.rentNow')}
                                     </button>
@@ -330,7 +416,9 @@ const RentalDetailPage = () => {
                             </div>
 
                             <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
-                                <h3 className="text-lg font-semibold font-montserrat mb-4">{t('equipment.detail.rentalPolicies')}</h3>
+                                <h3 className="text-lg font-semibold font-montserrat mb-4">
+                                    {t('equipment.detail.rentalPolicies')}
+                                </h3>
                                 <ul className="space-y-2 text-sm text-gray-700">
                                     <li className="flex items-start">
                                         <span className="font-semibold mr-2">•</span>
