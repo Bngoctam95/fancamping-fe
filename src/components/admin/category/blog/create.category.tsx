@@ -1,4 +1,4 @@
-import { createEquipmentCategoryAPI } from "services/api";
+import { createPostCategoryAPI } from "services/api";
 import { App, Button, Divider, Form, Input, Modal } from "antd";
 import type { FormProps } from "antd/lib";
 import { useState } from "react";
@@ -27,7 +27,7 @@ const CreateCategory = ({ openCreateCategory, setOpenCreateCategory, refreshTabl
     const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
         const { name, slug, description } = values;
         setLoading(true);
-        const res = await createEquipmentCategoryAPI(name, slug, description, "product");
+        const res = await createPostCategoryAPI(name, slug, description, "post");
         if (res?.data) {
             //success
             form.resetFields();

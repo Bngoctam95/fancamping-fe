@@ -1,6 +1,7 @@
 import { FileTextOutlined, ShopOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
-import EquipmentCategory from "@/components/admin/category/equipment/table.category";
+import EquipmentCategory from "components/admin/category/equipment/equipment.category";
+import BlogCategory from "components/admin/category/blog/blog.category";
 
 const LayoutCategory = () => {
     return (
@@ -16,7 +17,7 @@ const LayoutCategory = () => {
                 {
                     key: '2',
                     label: 'Bài viết',
-                    children: 'Bài viết',
+                    children: <BlogCategory />,
                     icon: <FileTextOutlined />,
                 }
             ]}

@@ -1,0 +1,148 @@
+/* TipTap Editor Styles */
+.ProseMirror {
+    outline: none;
+}
+
+.ProseMirror>*+* {
+    margin-top: 0.75em;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+    padding: 0 1rem;
+}
+
+/* Custom styles for bullet lists */
+.ProseMirror ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin: 0.5em 0;
+}
+
+.ProseMirror ul ul {
+    list-style-type: circle;
+}
+
+.ProseMirror ul ul ul {
+    list-style-type: square;
+}
+
+/* Custom styles for numbered lists */
+.ProseMirror ol {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+    margin: 0.5em 0;
+}
+
+.ProseMirror ol ol {
+    list-style-type: lower-alpha;
+}
+
+.ProseMirror ol ol ol {
+    list-style-type: lower-roman;
+}
+
+/* List item spacing */
+.ProseMirror li {
+    margin: 0.3em 0;
+}
+
+.ProseMirror li p {
+    margin: 0;
+}
+
+.ProseMirror h1 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.ProseMirror h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.ProseMirror h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+.ProseMirror blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid #ddd;
+}
+
+.ProseMirror pre {
+    background: #0d0d0d;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.ProseMirror pre code {
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.8rem;
+}
+
+.ProseMirror img {
+    max-width: 100%;
+    height: auto;
+}
+
+.ProseMirror table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+    border: 2px solid #ced4da;
+    box-sizing: border-box;
+    min-width: 1em;
+    padding: 3px 5px;
+    position: relative;
+    vertical-align: top;
+}
+
+.ProseMirror table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Table controls */
+.tableWrapper {
+    padding: 1rem 0;
+    overflow-x: auto;
+}
+
+/* Link styles */
+.ProseMirror a {
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Code block styles */
+.ProseMirror code {
+    background-color: #f3f4f6;
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+    font-size: 0.9em;
+}
+
+/* Highlight styles */
+.ProseMirror mark.highlight {
+    border-radius: 0.2em;
+    padding: 0.1em 0.3em;
+    margin: 0 0.1em;
+}
+
+/* Reset background-color to allow custom colors */
+.ProseMirror mark {
+    background-color: inherit;
+}

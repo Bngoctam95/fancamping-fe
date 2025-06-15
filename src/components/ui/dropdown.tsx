@@ -10,11 +10,13 @@ const DropdownDefault = ({
     onSelect,
     value,
     className,
+    style
 }: {
     options: DropdownOption[];
     onSelect: (option: DropdownOption) => void;
     value: string;
     className?: string;
+    style?: React.CSSProperties;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -54,6 +56,7 @@ const DropdownDefault = ({
         <div className="relative block" ref={dropdownRef}>
             <button
                 onClick={toggleDropdown}
+                style={style}
                 className={`flex items-center justify-between gap-2 bg-[#e6e2db] ${className} rounded py-2 px-3 text-gray-700 text-base cursor-pointer`}
             >
                 <span>{value}</span>

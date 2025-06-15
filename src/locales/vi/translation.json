@@ -10,6 +10,8 @@
         "admin": "Quản trị",
         "profile": "Hồ sơ",
         "myRentals": "Thuê thiết bị",
+        "myBlog": "Blog của tôi",
+        "myArticles": "Bài viết của tôi",
         "signOut": "Đăng xuất"
     },
     "login": {

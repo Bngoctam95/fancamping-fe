@@ -10,6 +10,8 @@
         "admin": "Admin",
         "profile": "Profile",
         "myRentals": "My Rentals",
+        "myBlog": "My Blog",
+        "myArticles": "My Articles",
         "signOut": "Sign Out"
     },
     "login": {

@@ -118,4 +118,31 @@ declare global {
         total: number;
         available: number;
     }
+
+    interface IPostTable {
+        _id: string;
+        title: string;
+        subTitle: string;
+        thumbnail: string;
+        tags: string[];
+        authorId: {
+            _id: string;
+            name: string;
+            email: string;
+        };
+        type: string;
+        categoryId: {
+            _id: string;
+            name: string;
+            slug: string;
+        };
+        published: boolean;
+        likeCount: number;
+        commentCount: number;
+        viewCount: number;
+        slug: string;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }
 }

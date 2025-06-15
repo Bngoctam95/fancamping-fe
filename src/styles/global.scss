@@ -113,6 +113,22 @@
         background-color: var(--button-hover-color);
     }
 
+    .bg-draft {
+        background-color: #777777;
+    }
+
+    .bg-pending {
+        background-color: #f59e0b;
+    }
+
+    .bg-published {
+        background-color: #008000;
+    }
+
+    .bg-archived {
+        background-color: #ff0000;
+    }
+
     .text-primary {
         color: var(--primary-color);
     }

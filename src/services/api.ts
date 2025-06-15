@@ -41,13 +41,13 @@ export const createUserAPI = (name: string, email: string, password: string, pho
 };
 
 export const getEquipmentCategoriesAPI = () => {
-    const urlBackend = 'products/categories';
+    const urlBackend = 'products/categories?type=product';
     return axios.get<IBackendRes<IEquipmentCategory>>(urlBackend);
 };
 
-export const createEquipmentCategoryAPI = (name: string, slug: string, description: string) => {
+export const createEquipmentCategoryAPI = (name: string, slug: string, description: string, type: string) => {
     const urlBackend = 'products/categories';
-    return axios.post<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description });
+    return axios.post<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description, type });
 };
 
 export const deleteEquipmentCategoryAPI = (_id: string) => {
@@ -57,6 +57,26 @@ export const deleteEquipmentCategoryAPI = (_id: string) => {
 
 export const updateEquipmentCategoryAPI = (_id: string, name: string, slug: string, description: string) => {
     const urlBackend = `products/categories/${_id}`;
+    return axios.put<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description });
+};
+
+export const getPostCategoriesAPI = () => {
+    const urlBackend = 'posts/categories?type=post';
+    return axios.get<IBackendRes<IEquipmentCategory>>(urlBackend);
+};
+
+export const createPostCategoryAPI = (name: string, slug: string, description: string, type: string) => {
+    const urlBackend = 'posts/categories';
+    return axios.post<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description, type });
+};
+
+export const deletePostCategoryAPI = (_id: string) => {
+    const urlBackend = `posts/categories/${_id}`;
+    return axios.delete<IBackendRes<IDeleteEquipmentCategory>>(urlBackend);
+};
+
+export const updatePostCategoryAPI = (_id: string, name: string, slug: string, description: string) => {
+    const urlBackend = `posts/categories/${_id}`;
     return axios.put<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description });
 };
 
@@ -155,3 +175,37 @@ export const uploadProductSliderAPI = (files: File[]) => {
         },
     });
 };
+
+// API upload blog thumbnail
+export const uploadPostThumbnailAPI = (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return axios.post<IBackendRes<string>>('posts/upload/thumbnail', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+
+// API upload blog content image
+export const uploadPostImageAPI = (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return axios.post<IBackendRes<string>>('posts/upload/content-image', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+
+export const createPostAPI = (title: string, subTitle: string, thumbnail: string, categoryId: string, tags: string[], content: string, type: string, slug: string, status: string) => {
+    const urlBackend = 'posts';
+    return axios.post<IBackendRes<IPostTable>>(urlBackend, { title, subTitle, thumbnail, categoryId, tags, content, type, slug, status });
+};
+
+export const getMyBlogsAPI = () => {
+    const urlBackend = 'posts/my-posts';
+    return axios.get<IBackendRes<IPostTable[]>>(urlBackend);
+}

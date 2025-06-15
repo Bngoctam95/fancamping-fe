@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles/global.scss';
+import './styles/editor.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import Layout from '@/layout.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from 'pages/client/home.tsx';
@@ -23,6 +25,12 @@ import ManaProductPage from 'pages/admin/manage.product';
 import ManaCategoryPage from 'pages/admin/manage.category';
 import viVN from 'antd/locale/vi_VN';
 import RentalDetailPage from 'pages/client/rental.detail';
+import MyBlogLayout from 'pages/client/my-blog/layout';
+import MyBlogListPage from 'pages/client/my-blog/list';
+import WriteBlogPage from 'pages/client/my-blog/write';
+import EditBlogPage from 'pages/client/my-blog/edit';
+import MyBlogHomePage from 'pages/client/my-blog/home';
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -120,6 +128,32 @@ const router = createBrowserRouter([
             },
         ],
     },
+    {
+        path: '/my-blog',
+        element: (
+            <ProtectedRoute>
+                <MyBlogLayout />
+            </ProtectedRoute>
+        ),
+        children: [
+            {
+                index: true,
+                element: <MyBlogHomePage />
+            },
+            {
+                path: 'list',
+                element: <MyBlogListPage />
+            },
+            {
+                path: 'write',
+                element: <WriteBlogPage />
+            },
+            {
+                path: ':id/edit',
+                element: <EditBlogPage />
+            }
+        ]
+    }
 ]);
 
 createRoot(document.getElementById('root')!).render(
