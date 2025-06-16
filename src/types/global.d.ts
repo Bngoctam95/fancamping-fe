@@ -1,4 +1,4 @@
-export { };
+export {};
 
 declare global {
     interface IBackendRes<T> {
@@ -124,6 +124,7 @@ declare global {
         title: string;
         subTitle: string;
         thumbnail: string;
+        content: string;
         tags: string[];
         authorId: {
             _id: string;

@@ -1,8 +1,9 @@
-import { getMyBlogsAPI } from "services/api";
-import { useEffect, useState } from "react";
-import PostCard from "@/components/my-posts/post.card";
-import { PlusCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { deletePostAPI, getMyBlogsAPI } from 'services/api';
+import { useEffect, useState } from 'react';
+import PostCard from '@/components/my-posts/post.card';
+import { PlusCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { App } from 'antd';
 
 const PostCardSkeleton = () => (
     <div className="bg-white p-4 rounded-lg shadow-md animate-pulse">
@@ -40,6 +41,7 @@ const MyBlogListPage = () => {
     const [myBlogs, setMyBlogs] = useState<IPostTable[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+    const { message } = App.useApp();
 
     useEffect(() => {
         const fetchMyBlogs = async () => {
@@ -50,7 +52,7 @@ const MyBlogListPage = () => {
                     setMyBlogs(res.data);
                 }
             } catch (error) {
-                console.error("Failed to fetch blogs:", error);
+                console.error('Failed to fetch blogs:', error);
             } finally {
                 setIsLoading(false);
             }
@@ -60,18 +62,22 @@ const MyBlogListPage = () => {
     }, []);
 
     const handleCreateNew = () => {
-        navigate("/my-blog/write");
+        navigate('/my-blog/write');
     };
 
     const handleEdit = (id: string) => {
-        navigate(`/my-blog/${id}/   edit`);
+        navigate(`/my-blog/${id}/edit`);
     };
 
     const handleDelete = async (id: string) => {
-        // TODO: Implement delete API call
-        console.log("Delete post:", id);
+        const res = await deletePostAPI(id);
+        if (res?.data) {
+            message.success('Xóa bài viết thành công');
+            setMyBlogs(myBlogs.filter((post) => post._id !== id));
+        } else {
+            message.error(res?.message || 'Lỗi khi xóa bài viết');
+        }
     };
-
 
     return (
         <section className="py-8 bg-canvas min-h-screen">
@@ -79,7 +85,7 @@ const MyBlogListPage = () => {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Bài viết của tôi</h1>
                     <button
-                        onClick={() => navigate("/my-blog")}
+                        onClick={() => navigate('/my-blog')}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-button text-white font-montserrat text-sm font-semibold rounded-lg hover:bg-button-hover transition-colors"
                     >
                         Quay lại Bảng điều khiển
@@ -88,17 +94,14 @@ const MyBlogListPage = () => {
 
                 <div className="grid gap-6">
                     {isLoading ? (
-                        Array(3).fill(0).map((_, i) => <PostCardSkeleton key={i} />)
+                        Array(3)
+                            .fill(0)
+                            .map((_, i) => <PostCardSkeleton key={i} />)
                     ) : myBlogs.length === 0 ? (
                         <EmptyState onCreateNew={handleCreateNew} />
                     ) : (
                         myBlogs.map((post) => (
-                            <PostCard
-                                key={post._id}
-                                post={post}
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
-                            />
+                            <PostCard key={post._id} post={post} onEdit={handleEdit} onDelete={handleDelete} />
                         ))
                     )}
                 </div>
