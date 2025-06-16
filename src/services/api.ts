@@ -200,12 +200,68 @@ export const uploadPostImageAPI = (file: File) => {
     });
 };
 
-export const createPostAPI = (title: string, subTitle: string, thumbnail: string, categoryId: string, tags: string[], content: string, type: string, slug: string, status: string) => {
+export const createPostAPI = (
+    title: string,
+    subTitle: string,
+    thumbnail: string,
+    categoryId: string,
+    tags: string[],
+    content: string,
+    type: string,
+    slug: string,
+    status: string
+) => {
     const urlBackend = 'posts';
-    return axios.post<IBackendRes<IPostTable>>(urlBackend, { title, subTitle, thumbnail, categoryId, tags, content, type, slug, status });
+    return axios.post<IBackendRes<IPostTable>>(urlBackend, {
+        title,
+        subTitle,
+        thumbnail,
+        categoryId,
+        tags,
+        content,
+        type,
+        slug,
+        status,
+    });
 };
 
 export const getMyBlogsAPI = () => {
     const urlBackend = 'posts/my-posts';
     return axios.get<IBackendRes<IPostTable[]>>(urlBackend);
-}
+};
+
+export const getPostByIdAPI = (_id: string) => {
+    const urlBackend = `posts/${_id}`;
+    return axios.get<IBackendRes<IPostTable>>(urlBackend);
+};
+
+export const updatePostAPI = (
+    _id: string,
+    title: string,
+    subTitle: string,
+    thumbnail: string,
+    categoryId: string,
+    tags: string[],
+    content: string,
+    type: string,
+    slug: string,
+    status: string
+) => {
+    const urlBackend = `posts/${_id}`;
+    return axios.put<IBackendRes<IPostTable>>(urlBackend, {
+        title,
+        subTitle,
+        thumbnail,
+        categoryId,
+        tags,
+        content,
+        type,
+        slug,
+        status,
+    });
+};
+
+export const deletePostAPI = (_id: string) => {
+    const urlBackend = `posts/${_id}`;
+    return axios.delete<IBackendRes<IPostTable>>(urlBackend);
+};

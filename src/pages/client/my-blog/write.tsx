@@ -1,10 +1,11 @@
-import PostEditor from "@/components/ui/post.editor";
-import { createPostAPI, getPostCategoriesAPI, uploadPostThumbnailAPI } from "@/services/api";
-import { App, Select, Upload } from "antd";
-import { useState, useEffect } from "react";
-import DropdownDefault from "@/components/ui/dropdown";
+import PostEditor from '@/components/ui/post.editor';
+import { createPostAPI, getPostCategoriesAPI, uploadPostThumbnailAPI } from '@/services/api';
+import { App, Select, Upload } from 'antd';
+import { useState, useEffect } from 'react';
+import DropdownDefault from '@/components/ui/dropdown';
 import type { UploadFile, UploadProps } from 'antd/lib';
 import type { GetProp } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 interface DropdownOption {
     _id: string;
@@ -15,7 +16,6 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const WriteBlogPage = () => {
     const [blogContent, setBlogContent] = useState('');
-    const [isDraft, setIsDraft] = useState(false);
     const [title, setTitle] = useState('');
     const [subTitle, setSubTitle] = useState('');
     const [slug, setSlug] = useState('');
@@ -27,7 +27,7 @@ const WriteBlogPage = () => {
     const [categories, setCategories] = useState<IEquipmentCategory[]>([]);
     const [fileListThumbnail, setFileListThumbnail] = useState<UploadFile[]>([]);
     const { message } = App.useApp();
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchAllCategories = async () => {
             const res = await getPostCategoriesAPI();
@@ -56,13 +56,13 @@ const WriteBlogPage = () => {
             category,
             categoryId,
             tags,
-            content: blogContent
+            content: blogContent,
         });
         try {
             let parsedContent;
             try {
                 parsedContent = JSON.parse(blogContent);
-            } catch (error) {
+            } catch {
                 message.error('Lỗi khi xử lý nội dung');
                 setIsSaving(false);
                 return;
@@ -80,15 +80,16 @@ const WriteBlogPage = () => {
                 'draft'
             );
 
-            console.log("res", res);
+            console.log('res', res);
 
             if (res?.data) {
                 message.success('Lưu nháp thành công');
                 resetForm();
+                navigate('/my-blog/list');
             } else {
                 message.error(res?.message || 'Lỗi khi lưu nháp');
             }
-        } catch (error) {
+        } catch {
             message.error('Lỗi khi lưu nháp');
         }
         setIsSaving(false);
@@ -116,7 +117,7 @@ const WriteBlogPage = () => {
             let parsedContent;
             try {
                 parsedContent = JSON.parse(blogContent);
-            } catch (error) {
+            } catch {
                 message.error('Lỗi khi xử lý nội dung');
                 return;
             }
@@ -135,10 +136,12 @@ const WriteBlogPage = () => {
 
             if (res?.data) {
                 message.success('Đăng bài thành công');
+                resetForm();
+                navigate('/my-blog/list');
             } else {
                 message.error(res?.message || 'Lỗi khi đăng bài');
             }
-        } catch (error) {
+        } catch {
             message.error('Lỗi khi đăng bài');
         }
     };
@@ -175,8 +178,7 @@ const WriteBlogPage = () => {
                 if (onError) onError(new Error(res.message || 'Upload failed'));
                 message.error(res.message || 'Upload failed');
             }
-        } catch (error: any) {
-            if (onError) onError(error);
+        } catch {
             message.error('Upload failed');
         }
     };
@@ -210,15 +212,14 @@ const WriteBlogPage = () => {
             <div className="container mx-auto px-6">
                 <div className="max-w-4xl mx-auto">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-2xl font-bold font-montserrat">
-                            Tạo Blog Mới
-                        </h2>
+                        <h2 className="text-2xl font-bold font-montserrat">Tạo Blog Mới</h2>
                         <div className="flex gap-3">
                             <button
                                 onClick={handleSaveDraft}
                                 disabled={isSaving}
-                                className={`${isSaving ? 'bg-gray-400' : 'bg-zinc-600'
-                                    } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity flex items-center gap-2`}
+                                className={`${
+                                    isSaving ? 'bg-gray-400' : 'bg-zinc-600'
+                                } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity flex items-center gap-2`}
                             >
                                 {isSaving ? (
                                     <>
@@ -226,14 +227,15 @@ const WriteBlogPage = () => {
                                         <span>Đang lưu...</span>
                                     </>
                                 ) : (
-                                    <>{isDraft ? 'Đã lưu nháp' : 'Lưu nháp'}</>
+                                    <>Lưu nháp</>
                                 )}
                             </button>
                             <button
                                 onClick={handlePublish}
                                 disabled={isSaving}
-                                className={`${isSaving ? 'bg-gray-400' : 'bg-campfire'
-                                    } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity`}
+                                className={`${
+                                    isSaving ? 'bg-gray-400' : 'bg-campfire'
+                                } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity`}
                             >
                                 Đăng bài
                             </button>
@@ -295,13 +297,11 @@ const WriteBlogPage = () => {
                                         placeholder="Mô tả ngắn gọn về nội dung bài viết..."
                                         value={subTitle}
                                         onChange={(e) => setSubTitle(e.target.value)}
-                                        className="w-full h-20 p-3 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                                        className="w-full h-20 p-3 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-base"
                                     />
                                 </div>
 
                                 <div className="grid gap-6 md:grid-cols-2">
-
-
                                     {/* Tags */}
                                     <div>
                                         <label className="block text-base font-medium text-gray-700 mb-2">
@@ -332,7 +332,12 @@ const WriteBlogPage = () => {
                                             onSelect={handleCategorySelect}
                                             value={category}
                                             className="w-full"
-                                            style={{ height: '40px', backgroundColor: 'white', border: '1px solid #e0e0e0', borderRadius: '8px' }}
+                                            style={{
+                                                height: '40px',
+                                                backgroundColor: 'white',
+                                                border: '1px solid #e0e0e0',
+                                                borderRadius: '8px',
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -343,10 +348,7 @@ const WriteBlogPage = () => {
                                 <label className="block text-base font-medium text-gray-700 mb-2">
                                     Nội dung <span className="text-red-500">*</span>
                                 </label>
-                                <PostEditor
-                                    content={blogContent}
-                                    onChange={setBlogContent}
-                                />
+                                <PostEditor content={blogContent} onChange={setBlogContent} />
                             </div>
                         </div>
                     </div>
