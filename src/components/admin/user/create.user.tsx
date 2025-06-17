@@ -1,7 +1,7 @@
-import { createUserAPI } from "services/api";
-import { App, Button, Divider, Form, Input, Modal } from "antd";
-import type { FormProps } from "antd/lib";
-import { useState } from "react";
+import { createUserAPI } from 'services/api';
+import { App, Button, Divider, Form, Input, Modal, Select } from 'antd';
+import type { FormProps } from 'antd/lib';
+import { useState } from 'react';
 
 interface ICreateUserProps {
     openCreateUser: boolean;
@@ -14,6 +14,7 @@ type FieldType = {
     email: string;
     phone: string;
     password: string;
+    role?: string;
 };
 
 const CreateUser = ({ openCreateUser, setOpenCreateUser, refreshTable }: ICreateUserProps) => {
@@ -22,9 +23,9 @@ const CreateUser = ({ openCreateUser, setOpenCreateUser, refreshTable }: ICreate
     const { message } = App.useApp();
 
     const handleSubmit: FormProps<FieldType>['onFinish'] = async (values) => {
-        const { name, email, password, phone } = values;
+        const { name, email, password, phone, role } = values;
         setLoading(true);
-        const res = await createUserAPI(name, email, password, phone);
+        const res = await createUserAPI(name, email, password, phone, role);
         if (res?.data) {
             //success
             form.resetFields();
@@ -38,25 +39,14 @@ const CreateUser = ({ openCreateUser, setOpenCreateUser, refreshTable }: ICreate
         setLoading(false);
     };
 
-
     const handleCancel = () => {
         setOpenCreateUser(false);
-    }
+    };
 
     return (
-        <Modal
-            title='Tạo mới người dùng'
-            open={openCreateUser}
-            onCancel={handleCancel}
-            footer={null}
-            destroyOnHidden
-        >
+        <Modal title="Tạo mới người dùng" open={openCreateUser} onCancel={handleCancel} footer={null} destroyOnHidden>
             <Divider></Divider>
-            <Form
-                form={form}
-                layout="vertical"
-                onFinish={handleSubmit}
-            >
+            <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 {/* Full Name */}
                 <Form.Item
                     label="Họ và tên"
@@ -72,7 +62,18 @@ const CreateUser = ({ openCreateUser, setOpenCreateUser, refreshTable }: ICreate
                     name="email"
                     rules={[{ type: 'email', message: 'Email không hợp lệ' }, { required: true }]}
                 >
-                    <Input autoComplete='email' id="modal_email" />
+                    <Input autoComplete="email" id="modal_email" />
+                </Form.Item>
+
+                {/* Role */}
+                <Form.Item label="Vai trò" name="role" rules={[{ required: true, message: 'Vui lòng chọn vai trò' }]}>
+                    <Select
+                        options={[
+                            { label: 'Admin', value: 'admin' },
+                            { label: 'Moderator', value: 'mod' },
+                            { label: 'User', value: 'user' },
+                        ]}
+                    />
                 </Form.Item>
 
                 {/* Password */}
@@ -81,7 +82,7 @@ const CreateUser = ({ openCreateUser, setOpenCreateUser, refreshTable }: ICreate
                     name="password"
                     rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
                 >
-                    <Input.Password autoComplete='current-password' id="modal_password" />
+                    <Input.Password autoComplete="current-password" id="modal_password" />
                 </Form.Item>
 
                 {/* Phone */}
@@ -113,7 +114,7 @@ const CreateUser = ({ openCreateUser, setOpenCreateUser, refreshTable }: ICreate
                 </Form.Item>
             </Form>
         </Modal>
-    )
-}
+    );
+};
 
 export default CreateUser;

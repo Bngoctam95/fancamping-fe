@@ -30,11 +30,18 @@ import MyBlogListPage from 'pages/client/my-blog/list';
 import WriteBlogPage from 'pages/client/my-blog/write';
 import EditBlogPage from 'pages/client/my-blog/edit';
 import MyBlogHomePage from 'pages/client/my-blog/home';
+import ManaPostPage from 'pages/admin/manage.post';
+import ScrollToTop from 'components/ScrollToTop';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout />,
+        element: (
+            <>
+                <ScrollToTop />
+                <Layout />
+            </>
+        ),
         children: [
             {
                 index: true,
@@ -60,15 +67,30 @@ const router = createBrowserRouter([
     },
     {
         path: '/login',
-        element: <LoginPage />,
+        element: (
+            <>
+                <ScrollToTop />
+                <LoginPage />
+            </>
+        ),
     },
     {
         path: '/register',
-        element: <RegisterPage />,
+        element: (
+            <>
+                <ScrollToTop />
+                <RegisterPage />
+            </>
+        ),
     },
     {
         path: 'admin',
-        element: <LayoutAdmin />,
+        element: (
+            <>
+                <ScrollToTop />
+                <LayoutAdmin />
+            </>
+        ),
         children: [
             {
                 index: true,
@@ -126,34 +148,45 @@ const router = createBrowserRouter([
                     </ProtectedRoute>
                 ),
             },
+            {
+                path: 'post',
+                element: (
+                    <ProtectedRoute>
+                        <ManaPostPage />
+                    </ProtectedRoute>
+                ),
+            },
         ],
     },
     {
         path: '/my-blog',
         element: (
-            <ProtectedRoute>
-                <MyBlogLayout />
-            </ProtectedRoute>
+            <>
+                <ScrollToTop />
+                <ProtectedRoute>
+                    <MyBlogLayout />
+                </ProtectedRoute>
+            </>
         ),
         children: [
             {
                 index: true,
-                element: <MyBlogHomePage />
+                element: <MyBlogHomePage />,
             },
             {
                 path: 'list',
-                element: <MyBlogListPage />
+                element: <MyBlogListPage />,
             },
             {
                 path: 'write',
-                element: <WriteBlogPage />
+                element: <WriteBlogPage />,
             },
             {
                 path: ':id/edit',
-                element: <EditBlogPage />
-            }
-        ]
-    }
+                element: <EditBlogPage />,
+            },
+        ],
+    },
 ]);
 
 createRoot(document.getElementById('root')!).render(
