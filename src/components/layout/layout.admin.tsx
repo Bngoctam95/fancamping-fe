@@ -5,7 +5,19 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useCurrentApp } from 'hooks/useCurrentApp';
 import { logoutAPI } from 'services/api';
 import { useTranslation } from 'react-i18next';
-import { BookOutlined, DashboardOutlined, HomeOutlined, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ProductOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import {
+    BookOutlined,
+    DashboardOutlined,
+    HomeOutlined,
+    LogoutOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    ProductOutlined,
+    SettingOutlined,
+    ShoppingCartOutlined,
+    UnorderedListOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
 import { Tent } from 'lucide-react';
 
 const { Header, Content, Sider } = Layout;
@@ -31,7 +43,7 @@ const LayoutAdmin = () => {
     } = theme.useToken();
     const { user, setUser, isAuthenticated, setIsAuthenticated } = useCurrentApp();
     const navigate = useNavigate();
-    //const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
+    const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}uploads/users/${user?.avatar}`;
 
     const { t } = useTranslation();
 
@@ -39,7 +51,8 @@ const LayoutAdmin = () => {
         getItem(<Link to="/admin">{t('admin.dashboard')}</Link>, 'dashboard', <DashboardOutlined />),
         getItem(<Link to="/admin/user">{t('admin.manageUsers')}</Link>, 'user', <UserOutlined />),
         getItem(<Link to="/admin/product">{t('admin.manageProducts')}</Link>, 'product', <ProductOutlined />),
-        getItem(<Link to="/admin/category">{t('admin.manageCategories')}</Link>, 'category', <BookOutlined />),
+        getItem(<Link to="/admin/category">{t('admin.manageCategories')}</Link>, 'category', <UnorderedListOutlined />),
+        getItem(<Link to="/admin/post">{t('admin.managePosts')}</Link>, 'post', <BookOutlined />),
         getItem(<Link to="/admin/order">{t('admin.manageOrders')}</Link>, 'order', <ShoppingCartOutlined />),
     ];
 
@@ -108,9 +121,17 @@ const LayoutAdmin = () => {
                     }}
                 >
                     <Tent className="text-secondary text-2xl" />
-                    {!collapsed && <span className="font-montserrat font-bold text-xl text-white">{t('siteName')}</span>}
+                    {!collapsed && (
+                        <span className="font-montserrat font-bold text-xl text-white">{t('siteName')}</span>
+                    )}
                 </div>
-                <Menu theme="dark" defaultSelectedKeys={[activeMenu]} mode="inline" items={sidebarItems} onClick={(e) => setActiveMenu(e.key)} />
+                <Menu
+                    theme="dark"
+                    defaultSelectedKeys={[activeMenu]}
+                    mode="inline"
+                    items={sidebarItems}
+                    onClick={(e) => setActiveMenu(e.key)}
+                />
             </Sider>
             <Layout>
                 <Header
@@ -140,19 +161,19 @@ const LayoutAdmin = () => {
                                 alignItems: 'center',
                                 gap: 10,
                             }}
-                        >                            
-                        <Avatar  
-                            style={{
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s',
-                            }}
-                            className="hover:bg-blue-500"
-                            shape="square"
-                            size={40} 
-                            icon={<HomeOutlined />} 
-                            onClick={() => navigate('/')}
-                        />
-                            
+                        >
+                            <Avatar
+                                style={{
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s',
+                                }}
+                                className="hover:bg-blue-500"
+                                shape="square"
+                                size={40}
+                                icon={<HomeOutlined />}
+                                onClick={() => navigate('/')}
+                            />
+
                             <Dropdown
                                 menu={{
                                     items: profileDropdownItems,
@@ -161,7 +182,7 @@ const LayoutAdmin = () => {
                                 trigger={['click']}
                                 placement="bottomRight"
                                 arrow
-                            >                                
+                            >
                                 <Avatar
                                     style={{
                                         cursor: 'pointer',
@@ -169,9 +190,9 @@ const LayoutAdmin = () => {
                                         transition: 'background-color 0.3s',
                                     }}
                                     className="hover:bg-blue-500"
-                                    shape="square"
                                     size={40}
                                     icon={<UserOutlined />}
+                                    src={urlAvatar}
                                 />
                             </Dropdown>
                             <Modal

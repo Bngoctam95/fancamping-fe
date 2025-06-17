@@ -71,7 +71,6 @@ const EditBlogPage = () => {
     };
 
     useEffect(() => {
-        console.log('post', post);
         if (post) {
             const arrThumbnail = [
                 {
@@ -157,24 +156,16 @@ const EditBlogPage = () => {
     };
 
     const handleSaveDraft = async () => {
-        console.log('Saving draft:', {
-            id,
-            title,
-            subTitle,
-            thumbnail,
-            category,
-            categoryId,
-            tags,
-            slug,
-            content: blogContent,
-        });
+        if (!title || !subTitle || !blogContent || !thumbnail || !categoryId || tags.length === 0) {
+            message.error('Vui lòng điền đầy đủ thông tin bắt buộc!');
+            return;
+        }
         setIsSaving(true);
 
         let parsedContent;
         try {
             // If blogContent is empty (not updated), use post.content
             const contentToParse = blogContent || post?.content || '';
-            console.log('contentToParse:', contentToParse);
 
             // Check if content is already an object
             if (typeof contentToParse === 'object') {
@@ -202,7 +193,6 @@ const EditBlogPage = () => {
             'draft'
         );
 
-        console.log('res', res);
         if (res?.data) {
             message.success('Lưu nháp thành công');
             navigate('/my-blog/list');
@@ -224,7 +214,6 @@ const EditBlogPage = () => {
         try {
             // If blogContent is empty (not updated), use post.content
             const contentToParse = blogContent || post?.content || '';
-            console.log('contentToParse:', contentToParse);
 
             // Check if content is already an object
             if (typeof contentToParse === 'object') {
@@ -252,7 +241,6 @@ const EditBlogPage = () => {
             'pending'
         );
 
-        console.log('res', res);
         if (res?.data) {
             message.success('Đăng bài thành công');
             navigate('/my-blog/list');

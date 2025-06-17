@@ -1,10 +1,26 @@
 import PostCard from '@/components/my-posts/post.card';
 import { getMyBlogsAPI } from '@/services/api';
 import { useCurrentApp } from 'hooks/useCurrentApp';
-import { Calendar, CheckCircle, Clock, Edit3, FileText, MapPin } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit3, FileText, PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const EmptyState = ({ onCreateNew }: { onCreateNew: () => void }) => (
+    <div className="text-center py-12">
+        <h3 className="text-xl font-semibold mb-2">Chưa có bài viết nào</h3>
+        <p className="text-gray-600 mb-6">Hãy bắt đầu chia sẻ câu chuyện của bạn</p>
+        <button
+            onClick={onCreateNew}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-button text-white font-montserrat text-sm font-semibold rounded-lg hover:bg-button-hover transition-colors"
+        >
+            <PlusCircle size={20} />
+            Tạo bài viết mới
+        </button>
+    </div>
+);
 
 const MyBlogHomePage = () => {
+    const navigate = useNavigate();
     const { user } = useCurrentApp();
     const [myBlogs, setMyBlogs] = useState<IPostTable[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -50,6 +66,10 @@ const MyBlogHomePage = () => {
     }, [myBlogs]);
 
     const recentPosts = myBlogs.slice(0, 4);
+
+    const handleCreateNew = () => {
+        navigate('/my-blog/write');
+    };
 
     return (
         <section className="py-8 bg-canvas min-h-screen">
@@ -126,11 +146,15 @@ const MyBlogHomePage = () => {
                 </div>
                 <div>
                     <h3 className="text-2xl font-bold mb-8 text-center font-montserrat">Bài viết gần đây</h3>
-                    <div className="grid gap-8 md:grid-cols-2">
-                        {recentPosts.map((post) => (
-                            <PostCard key={post._id} post={post} isShowAction={false} />
-                        ))}
-                    </div>
+                    {recentPosts.length === 0 ? (
+                        <EmptyState onCreateNew={handleCreateNew} />
+                    ) : (
+                        <div className="grid gap-8 md:grid-cols-2">
+                            {recentPosts.map((post) => (
+                                <PostCard key={post._id} post={post} isShowAction={false} />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

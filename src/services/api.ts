@@ -35,9 +35,20 @@ export const updateUserAPI = (_id: string, name: string, phone: string) => {
     return axios.put<IBackendRes<IRegister>>(urlBackend, { name, phone });
 };
 
-export const createUserAPI = (name: string, email: string, password: string, phone: string) => {
+export const createUserAPI = (name: string, email: string, password: string, phone: string, role?: string) => {
     const urlBackend = 'users';
-    return axios.post<IBackendRes<IUserTable>>(urlBackend, { name, email, password, phone });
+    return axios.post<IBackendRes<IUserTable>>(urlBackend, { name, email, password, phone, role });
+};
+
+export const updateUserAvatarAPI = (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return axios.post<IBackendRes<IUserAvatar>>('users/upload/avatar', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
 };
 
 export const getEquipmentCategoriesAPI = () => {

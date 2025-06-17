@@ -46,6 +46,10 @@ declare global {
         isActive: boolean;
     }
 
+    interface IUserAvatar {
+        avatar: string;
+    }
+
     interface IUserTable {
         _id: string;
         name: string;

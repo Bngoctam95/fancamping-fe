@@ -48,16 +48,11 @@ const WriteBlogPage = () => {
     };
 
     const handleSaveDraft = async () => {
+        if (!title || !subTitle || !blogContent || !thumbnail || !categoryId || tags.length === 0) {
+            message.error('Vui lòng điền đầy đủ thông tin bắt buộc!');
+            return;
+        }
         setIsSaving(true);
-        console.log('Saving draft:', {
-            title,
-            subTitle,
-            thumbnail,
-            category,
-            categoryId,
-            tags,
-            content: blogContent,
-        });
         try {
             let parsedContent;
             try {
@@ -79,8 +74,6 @@ const WriteBlogPage = () => {
                 slug,
                 'draft'
             );
-
-            console.log('res', res);
 
             if (res?.data) {
                 message.success('Lưu nháp thành công');
@@ -112,6 +105,7 @@ const WriteBlogPage = () => {
             message.error('Vui lòng điền đầy đủ thông tin bắt buộc!');
             return;
         }
+        setIsSaving(true);
 
         try {
             let parsedContent;
@@ -144,6 +138,7 @@ const WriteBlogPage = () => {
         } catch {
             message.error('Lỗi khi đăng bài');
         }
+        setIsSaving(false);
     };
 
     const beforeUploadThumbnail = (file: FileType) => {
