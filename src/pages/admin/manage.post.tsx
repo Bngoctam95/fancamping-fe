@@ -1,5 +1,11 @@
+import LayoutBlog from "components/admin/post/blog/layout.blog";
+
 const ManaPostPage = () => {
-    return <div>Manage Post</div>;
+    return (
+        <div>
+            <LayoutBlog />
+        </div>
+    );
 };
 
 export default ManaPostPage;

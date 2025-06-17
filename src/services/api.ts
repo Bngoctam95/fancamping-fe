@@ -241,6 +241,11 @@ export const getMyBlogsAPI = () => {
     return axios.get<IBackendRes<IPostTable[]>>(urlBackend);
 };
 
+export const getAllPostsAPI = (query: string) => {
+    const urlBackend = `posts?${query}`;
+    return axios.get<IBackendRes<IPostTable[]>>(urlBackend);
+};
+
 export const getPostByIdAPI = (_id: string) => {
     const urlBackend = `posts/${_id}`;
     return axios.get<IBackendRes<IPostTable>>(urlBackend);
@@ -270,6 +275,11 @@ export const updatePostAPI = (
         slug,
         status,
     });
+};
+
+export const updatePostStatusAPI = (_id: string, status: string) => {
+    const urlBackend = `posts/${_id}`;
+    return axios.put<IBackendRes<IPostTable>>(urlBackend, { status });
 };
 
 export const deletePostAPI = (_id: string) => {

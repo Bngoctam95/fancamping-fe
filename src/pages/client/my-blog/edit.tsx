@@ -1,5 +1,4 @@
 import {
-    createPostAPI,
     getPostByIdAPI,
     getPostCategoriesAPI,
     updatePostAPI,
@@ -268,9 +267,8 @@ const EditBlogPage = () => {
                             <button
                                 disabled={isSaving}
                                 onClick={handleSaveDraft}
-                                className={`${
-                                    isSaving ? 'bg-gray-400' : 'bg-zinc-600'
-                                } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity flex items-center gap-2`}
+                                className={`${isSaving ? 'bg-gray-400' : 'bg-zinc-600'
+                                    } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity flex items-center gap-2`}
                             >
                                 {isSaving ? (
                                     <>
@@ -284,9 +282,8 @@ const EditBlogPage = () => {
                             <button
                                 disabled={isSaving}
                                 onClick={handlePublish}
-                                className={`${
-                                    isSaving ? 'bg-gray-400' : 'bg-campfire'
-                                } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity`}
+                                className={`${isSaving ? 'bg-gray-400' : 'bg-campfire'
+                                    } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity`}
                             >
                                 Đăng bài
                             </button>
