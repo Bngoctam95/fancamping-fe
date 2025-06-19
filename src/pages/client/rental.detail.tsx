@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { getProductDetailAPI } from '@/services/api';
+import { getProductDetailBySlugAPI } from 'services/api';
 import { ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Loader2, Minus, Package, Plus, Star } from 'lucide-react';
 import { DatePicker } from 'antd';
 import type { Dayjs } from 'dayjs';
@@ -16,7 +16,7 @@ interface DropdownOption {
 
 const RentalDetailPage = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { slug } = useParams();
     const { t } = useTranslation();
     const { isAuthenticated } = useCurrentApp();
     const { RangePicker } = DatePicker;
@@ -42,14 +42,14 @@ const RentalDetailPage = () => {
 
     useEffect(() => {
         const fetchProductDetail = async () => {
-            const res = await getProductDetailAPI(id as string);
+            const res = await getProductDetailBySlugAPI(slug as string);
             if (res.data) {
                 setProductDetail(res.data);
                 setIsLoading(false);
             }
         };
         fetchProductDetail();
-    }, [id]);
+    }, [slug]);
 
     const formatPrice = (price: number) => {
         return `${price.toLocaleString('vi-VN')} VND`;

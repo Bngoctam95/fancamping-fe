@@ -1,10 +1,11 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, message } from 'antd';
+import { App, Avatar } from 'antd';
 import { useCurrentApp } from 'hooks/useCurrentApp';
 import { updateUserAvatarAPI } from 'services/api';
 
 const ProfileAdmin = () => {
     const { user, setUser } = useCurrentApp();
+    const { message } = App.useApp();
 
     const handleChangeAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

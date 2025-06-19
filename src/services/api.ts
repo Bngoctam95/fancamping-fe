@@ -101,6 +101,11 @@ export const getProductDetailAPI = (_id: string) => {
     return axios.get<IBackendRes<IProductTable>>(urlBackend);
 };
 
+export const getProductDetailBySlugAPI = (slug: string) => {
+    const urlBackend = `products/slug/${slug}`;
+    return axios.get<IBackendRes<IProductTable>>(urlBackend);
+};
+
 export const deleteProductAPI = (_id: string) => {
     const urlBackend = `products/${_id}`;
     return axios.delete<IBackendRes<IProductTable>>(urlBackend);
@@ -248,6 +253,11 @@ export const getAllPostsAPI = (query: string) => {
 
 export const getPostByIdAPI = (_id: string) => {
     const urlBackend = `posts/${_id}`;
+    return axios.get<IBackendRes<IPostTable>>(urlBackend);
+};
+
+export const getPostBySlugAPI = (slug: string) => {
+    const urlBackend = `posts/slug/${slug}`;
     return axios.get<IBackendRes<IPostTable>>(urlBackend);
 };
 

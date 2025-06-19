@@ -1,5 +1,5 @@
 import { formatDate } from 'services/helper';
-import { Calendar, ClipboardPenLine, Edit3, Trash2 } from 'lucide-react';
+import { BookmarkCheck, Calendar, ClipboardPenLine, Edit3, Eye, Trash2 } from 'lucide-react';
 import { Popconfirm } from 'antd';
 
 interface IPostCardProps {
@@ -13,6 +13,8 @@ const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProp
     const handleDelete = () => {
         onDelete?.(post._id);
     };
+
+    const handlePreview = () => {};
 
     return (
         <div
@@ -32,13 +34,18 @@ const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProp
                 </h4>
                 <div className="flex flex-wrap items-center gap-2 mb-3 text-sm">
                     <div className="flex items-center gap-1 font-semibold bg-gray-100 px-2 py-1 rounded-full">
-                        <span>Danh mục:</span>
+                        <BookmarkCheck size={16} />
                         {post.categoryId?.name}
+                    </div>
+                    <div className="flex items-center gap-1 font-semibold bg-orange-300 px-2 py-1 rounded-full">
+                        <button className="flex items-center gap-1" onClick={handlePreview}>
+                            Xem bài viết <Eye size={16} className="ml-1" />
+                        </button>
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 mb-3 text-sm">
                     <div className="flex items-center gap-1 font-semibold">
-                        <Calendar size={14} />
+                        <Calendar size={16} />
                         {formatDate(post.createdAt)}
                     </div>
                     <div
@@ -52,13 +59,11 @@ const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProp
                                     : 'bg-archived'
                         }`}
                     >
-                        <ClipboardPenLine size={14} />
+                        <ClipboardPenLine size={16} />
                         {post.status}
                     </div>
                 </div>
-                <p className="mb-4 font-montserrat text-gray-600 line-clamp-2 hover:line-clamp-none transition-all duration-200">
-                    {post.subTitle}
-                </p>
+                <p className="mb-4 font-montserrat text-gray-600 line-clamp-2">{post.subTitle}</p>
                 <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag: string) => (
                         <span

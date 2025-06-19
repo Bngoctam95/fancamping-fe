@@ -32,6 +32,8 @@ import EditBlogPage from 'pages/client/my-blog/edit';
 import MyBlogHomePage from 'pages/client/my-blog/home';
 import ManaPostPage from 'pages/admin/manage.post';
 import ScrollToTop from 'components/ScrollToTop';
+import ProfilePage from 'pages/client/profile';
+import BlogDetailPage from 'pages/client/blog.detail';
 
 const router = createBrowserRouter([
     {
@@ -52,7 +54,7 @@ const router = createBrowserRouter([
                 element: <RentalPage />,
             },
             {
-                path: '/rental/:id',
+                path: '/rental/:slug',
                 element: <RentalDetailPage />,
             },
             {
@@ -60,8 +62,16 @@ const router = createBrowserRouter([
                 element: <BlogPage />,
             },
             {
+                path: '/blog/:slug',
+                element: <BlogDetailPage />,
+            },
+            {
                 path: '/article',
                 element: <ArticlePage />,
+            },
+            {
+                path: '/profile',
+                element: <ProfilePage />,
             },
         ],
     },

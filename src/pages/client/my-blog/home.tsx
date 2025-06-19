@@ -1,7 +1,7 @@
 import PostCard from '@/components/my-posts/post.card';
 import { getMyBlogsAPI } from '@/services/api';
 import { useCurrentApp } from 'hooks/useCurrentApp';
-import { Calendar, CheckCircle, Clock, Edit3, FileText, PlusCircle } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit3, FileText, Loader2, PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -70,6 +70,14 @@ const MyBlogHomePage = () => {
     const handleCreateNew = () => {
         navigate('/my-blog/write');
     };
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-[400px]">
+                <Loader2 className="h-12 w-12 animate-spin text-forest" />
+            </div>
+        );
+    }
 
     return (
         <section className="py-8 bg-canvas min-h-screen">
