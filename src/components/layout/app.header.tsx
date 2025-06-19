@@ -102,7 +102,7 @@ const AppHeader = () => {
                                     </svg>
                                 </button>
                                 {isUserDropdownOpen && (
-                                    <div className="absolute right-0 mt-2 min-w-[180px] rounded-md bg-dropdown border border-gray-700 shadow-lg animate-fadeIn z-50">
+                                    <div className="absolute right-0 mt-2 min-w-[200px] rounded-md bg-dropdown border border-gray-700 shadow-lg animate-fadeIn z-50">
                                         <div className="py-1 px-1">
                                             <div className="flex items-center px-3 py-2 text-white text-base font-semibold">
                                                 {user?.avatar ? (

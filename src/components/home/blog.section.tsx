@@ -2,123 +2,29 @@ import { useCurrentApp } from 'hooks/useCurrentApp';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BlogCard from 'components/blog/card';
-
-interface Blog {
-    id: number;
-    title: string;
-    subTitle: string;
-    imageUrl: string;
-    publishedAt: string;
-    author: {
-        id: number;
-        name: string;
-    };
-    comments: number;
-    likes: number;
-}
+import { getAllPostsAPI } from 'services/api';
 
 const BlogSection = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [displayedBlogs, setDisplayedBlogs] = useState<Blog[]>([]);
+    const [displayedBlogs, setDisplayedBlogs] = useState<IPostTable[]>([]);
     const { isAuthenticated } = useCurrentApp();
 
-    // Blog dummy data
-    const dummyBlogs = [
-        {
-            id: 1,
-            title: 'Điểm đến nổi tiếng ở Việt Nam',
-            subTitle:
-                'Điểm đến nổi tiếng ở Việt Nam, được nhiều người yêu thích vì vẻ đẹp tự nhiên và không khí trong lành.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            publishedAt: '2021-01-01',
-            author: {
-                id: 1,
-                name: 'Nguyễn Văn A',
-            },
-            comments: 10,
-            likes: 10,
-        },
-        {
-            id: 2,
-            title: 'Điểm đến nổi tiếng ở Việt Nam',
-            subTitle:
-                'Điểm đến nổi tiếng ở Việt Nam, được nhiều người yêu thích vì vẻ đẹp tự nhiên và không khí trong lành.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            publishedAt: '2021-01-01',
-            author: {
-                id: 2,
-                name: 'Nguyễn Văn B',
-            },
-            comments: 10,
-            likes: 10,
-        },
-        {
-            id: 3,
-            title: 'Điểm đến nổi tiếng ở Việt Nam',
-            subTitle:
-                'Điểm đến nổi tiếng ở Việt Nam, được nhiều người yêu thích vì vẻ đẹp tự nhiên và không khí trong lành.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            publishedAt: '2021-01-01',
-            author: {
-                id: 3,
-                name: 'Nguyễn Văn A',
-            },
-            comments: 10,
-            likes: 10,
-        },
-        {
-            id: 4,
-            title: 'Điểm đến nổi tiếng ở Việt Nam',
-            subTitle:
-                'Điểm đến nổi tiếng ở Việt Nam, được nhiều người yêu thích vì vẻ đẹp tự nhiên và không khí trong lành.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            publishedAt: '2021-01-01',
-            author: {
-                id: 4,
-                name: 'Nguyễn Văn B',
-            },
-            comments: 10,
-            likes: 10,
-        },
-        {
-            id: 5,
-            title: 'Điểm đến nổi tiếng ở Việt Nam',
-            subTitle:
-                'Điểm đến nổi tiếng ở Việt Nam, được nhiều người yêu thích vì vẻ đẹp tự nhiên và không khí trong lành.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            publishedAt: '2021-01-01',
-            author: {
-                id: 5,
-                name: 'Nguyễn Văn C',
-            },
-            comments: 10,
-            likes: 10,
-        },
-        {
-            id: 6,
-            title: 'Điểm đến nổi tiếng ở Việt Nam',
-            subTitle:
-                'Điểm đến nổi tiếng ở Việt Nam, được nhiều người yêu thích vì vẻ đẹp tự nhiên và không khí trong lành.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            publishedAt: '2021-01-01',
-            author: {
-                id: 6,
-                name: 'Nguyễn Văn D',
-            },
-            comments: 10,
-            likes: 10,
-        },
-    ];
+    const fetchAllBlogs = async () => {
+        try {
+            setIsLoading(true);
+            const res = await getAllPostsAPI(`type=blog&status=published`);
+            if (res?.data) {
+                setDisplayedBlogs(res.data);
+            }
+        } catch (error) {
+            console.error('Error fetching equipment categories:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        setDisplayedBlogs(dummyBlogs);
-        setIsLoading(false);
+        fetchAllBlogs();
     }, []);
 
     return (
@@ -164,7 +70,7 @@ const BlogSection = () => {
                 ) : displayedBlogs.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {displayedBlogs.map((blog) => (
-                            <BlogCard key={blog.id} blog={blog} />
+                            <BlogCard key={blog._id} blog={blog} />
                         ))}
                     </div>
                 ) : (
@@ -176,7 +82,7 @@ const BlogSection = () => {
                 )}
 
                 <div className="text-center mt-12">
-                    <Link to={isAuthenticated ? '/article' : '/login'}>
+                    <Link to={isAuthenticated ? '/my-blog' : '/login'}>
                         <button className="bg-primary hover:bg-primary-hover font-montserrat text-white font-semibold text-sm px-4 py-3 rounded-md">
                             Chia sẻ trải nghiệm của bạn
                         </button>

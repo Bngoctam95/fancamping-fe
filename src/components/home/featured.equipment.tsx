@@ -12,7 +12,7 @@ const FeaturedEquipment = () => {
     const fetchEquipment = async () => {
         const query = 'page=1&limit=6';
         const res = await getProductsAPI(query);
-        console.log('Featured Equipment:', res.data);
+
         if (res.data && res.data.items) {
             setFilteredEquipment(res.data.items);
             setIsLoadingEquipment(false);

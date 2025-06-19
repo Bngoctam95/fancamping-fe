@@ -1,4 +1,3 @@
-import PostEditor from '@/components/ui/post.editor';
 import { createPostAPI, getPostCategoriesAPI, uploadPostThumbnailAPI } from '@/services/api';
 import { App, Select, Upload } from 'antd';
 import { useState, useEffect } from 'react';
@@ -6,6 +5,7 @@ import DropdownDefault from '@/components/ui/dropdown';
 import type { UploadFile, UploadProps } from 'antd/lib';
 import type { GetProp } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import TiptapEditor from '@/components/ui/tiptap-editor/tiptap.editor';
 
 interface DropdownOption {
     _id: string;
@@ -155,6 +155,7 @@ const WriteBlogPage = () => {
         return isValidFormat && isLt5M;
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUploadThumbnail = async (options: any) => {
         const { file, onSuccess, onError } = options;
         try {
@@ -343,7 +344,9 @@ const WriteBlogPage = () => {
                                 <label className="block text-base font-medium text-gray-700 mb-2">
                                     Nội dung <span className="text-red-500">*</span>
                                 </label>
-                                <PostEditor content={blogContent} onChange={setBlogContent} />
+                                <div className="border rounded-lg overflow-hidden">
+                                    <TiptapEditor content={blogContent} onChange={setBlogContent} />
+                                </div>
                             </div>
                         </div>
                     </div>

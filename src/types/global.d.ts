@@ -134,6 +134,7 @@ declare global {
             _id: string;
             name: string;
             email: string;
+            avatar: string;
         };
         type: string;
         categoryId: {
@@ -149,5 +150,14 @@ declare global {
         status: string;
         createdAt: Date;
         updatedAt: Date;
+    }
+
+    interface IComment {
+        postId: string;
+        authorId: string;
+        content: string;
+        parentId: string | null;
+        status: string;
+        likeCount: number;
     }
 }

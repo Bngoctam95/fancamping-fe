@@ -102,11 +102,32 @@ const MenuBar = ({ editor }: { editor: any }) => {
 
     const addTable = useCallback(() => {
         editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
-    }, [editor]); const colors = [
-        '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc',
-        '#d74242', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3',
-        '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39',
-        '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#607d8b'
+    }, [editor]);
+    const colors = [
+        '#000000',
+        '#434343',
+        '#666666',
+        '#999999',
+        '#b7b7b7',
+        '#cccccc',
+        '#d74242',
+        '#e91e63',
+        '#9c27b0',
+        '#673ab7',
+        '#3f51b5',
+        '#2196f3',
+        '#03a9f4',
+        '#00bcd4',
+        '#009688',
+        '#4caf50',
+        '#8bc34a',
+        '#cddc39',
+        '#ffeb3b',
+        '#ffc107',
+        '#ff9800',
+        '#ff5722',
+        '#795548',
+        '#607d8b',
     ];
 
     const handleColor = (color: string) => {
@@ -117,13 +138,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
     return (
         <div className="border-b border-gray-200 p-4 flex flex-wrap gap-2">
             {/* Hidden file input for image upload */}
-            <input
-                type="file"
-                ref={imageInputRef}
-                onChange={handleImageUpload}
-                accept="image/*"
-                className="hidden"
-            />
+            <input type="file" ref={imageInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
 
             <button
                 onClick={() => editor.chain().focus().toggleBold().run()}
@@ -213,11 +228,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
             >
                 <i className="fas fa-link"></i>
             </button>
-            <button
-                onClick={addImage}
-                className="p-2 rounded hover:bg-gray-100"
-                title="Add Image"
-            >
+            <button onClick={addImage} className="p-2 rounded hover:bg-gray-100" title="Add Image">
                 <i className="fas fa-image"></i>
             </button>
             <button
@@ -246,33 +257,34 @@ const MenuBar = ({ editor }: { editor: any }) => {
                     <i className="fas fa-paint-brush"></i>
                     <div className="w-2 h-2" style={{ backgroundColor: currentTextColor }}></div>
                 </button>
-                {showColorPicker && (<div
-                    ref={colorPickerRef}
-                    className="absolute top-full right-0 mt-1 p-2 bg-white shadow-lg rounded-lg z-50 w-64"
-                >
-                    <div className="mb-2">
-                        <input
-                            type="color"
-                            value={currentTextColor}
-                            onChange={(e) => handleColor(e.target.value)}
-                            className="w-full h-10 cursor-pointer"
-                        />
-                    </div>
-                    <div className="grid grid-cols-6 gap-1">
-                        {colors.map((color) => (
-                            <button
-                                key={color}
-                                onClick={() => {
-                                    handleColor(color);
-                                    setShowColorPicker(false);
-                                }}
-                                className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform"
-                                style={{ backgroundColor: color }}
-                                title={color}
+                {showColorPicker && (
+                    <div
+                        ref={colorPickerRef}
+                        className="absolute top-full right-0 mt-1 p-2 bg-white shadow-lg rounded-lg z-50 w-64"
+                    >
+                        <div className="mb-2">
+                            <input
+                                type="color"
+                                value={currentTextColor}
+                                onChange={(e) => handleColor(e.target.value)}
+                                className="w-full h-10 cursor-pointer"
                             />
-                        ))}
+                        </div>
+                        <div className="grid grid-cols-6 gap-1">
+                            {colors.map((color) => (
+                                <button
+                                    key={color}
+                                    onClick={() => {
+                                        handleColor(color);
+                                        setShowColorPicker(false);
+                                    }}
+                                    className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform"
+                                    style={{ backgroundColor: color }}
+                                    title={color}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
                 )}
             </div>
 
@@ -300,42 +312,43 @@ const MenuBar = ({ editor }: { editor: any }) => {
                         }}
                     ></div>
                 </button>
-                {showHighlightPicker && (<div
-                    ref={highlightPickerRef}
-                    className="absolute top-full right-0 mt-1 p-2 bg-white shadow-lg rounded-lg z-50 w-64"
-                >
-                    <div className="mb-2">
-                        <input
-                            type="color"
-                            value={currentHighlightColor}
-                            onChange={(e) => {
-                                const newColor = e.target.value;
-                                setCurrentHighlightColor(newColor);
-                                if (editor.isActive('highlight')) {
-                                    editor.chain().focus().setHighlight({ color: newColor }).run();
-                                }
-                            }}
-                            className="w-full h-10 cursor-pointer"
-                        />
-                    </div>
-                    <div className="grid grid-cols-6 gap-1">
-                        {colors.map((color) => (
-                            <button
-                                key={color}
-                                onClick={() => {
-                                    setCurrentHighlightColor(color);
+                {showHighlightPicker && (
+                    <div
+                        ref={highlightPickerRef}
+                        className="absolute top-full right-0 mt-1 p-2 bg-white shadow-lg rounded-lg z-50 w-64"
+                    >
+                        <div className="mb-2">
+                            <input
+                                type="color"
+                                value={currentHighlightColor}
+                                onChange={(e) => {
+                                    const newColor = e.target.value;
+                                    setCurrentHighlightColor(newColor);
                                     if (editor.isActive('highlight')) {
-                                        editor.chain().focus().setHighlight({ color }).run();
+                                        editor.chain().focus().setHighlight({ color: newColor }).run();
                                     }
-                                    setShowHighlightPicker(false);
                                 }}
-                                className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform"
-                                style={{ backgroundColor: color }}
-                                title={color}
+                                className="w-full h-10 cursor-pointer"
                             />
-                        ))}
+                        </div>
+                        <div className="grid grid-cols-6 gap-1">
+                            {colors.map((color) => (
+                                <button
+                                    key={color}
+                                    onClick={() => {
+                                        setCurrentHighlightColor(color);
+                                        if (editor.isActive('highlight')) {
+                                            editor.chain().focus().setHighlight({ color }).run();
+                                        }
+                                        setShowHighlightPicker(false);
+                                    }}
+                                    className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform"
+                                    style={{ backgroundColor: color }}
+                                    title={color}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
                 )}
             </div>
         </div>

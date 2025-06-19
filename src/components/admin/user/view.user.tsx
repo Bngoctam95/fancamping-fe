@@ -1,6 +1,8 @@
-import { formatDate } from "services/helper";
-import { Avatar, Badge, Descriptions, Drawer } from "antd";
-import type { DescriptionsProps } from "antd/lib";
+import { formatDate } from 'services/helper';
+import { Avatar, Badge, Descriptions, Drawer } from 'antd';
+import type { DescriptionsProps } from 'antd/lib';
+import { useCurrentApp } from 'hooks/useCurrentApp';
+import { UserOutlined } from '@ant-design/icons';
 
 interface IViewUserProps {
     openViewUser: boolean;
@@ -9,7 +11,8 @@ interface IViewUserProps {
 }
 
 const ViewUser = ({ openViewUser, setOpenViewUser, userView }: IViewUserProps) => {
-    //const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${currentUser?.avatar}`;
+    const { user } = useCurrentApp();
+    const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
     const items: DescriptionsProps['items'] = [
         {
             label: 'Id',
@@ -33,7 +36,7 @@ const ViewUser = ({ openViewUser, setOpenViewUser, userView }: IViewUserProps) =
         },
         {
             label: 'Ảnh đại diện',
-            children: <Avatar />,
+            children: <Avatar src={urlAvatar} icon={<UserOutlined />} />,
         },
         {
             label: 'Ngày tạo',
@@ -59,7 +62,7 @@ const ViewUser = ({ openViewUser, setOpenViewUser, userView }: IViewUserProps) =
         >
             <Descriptions title="Thông tin người dùng" bordered items={items} column={2} />
         </Drawer>
-    )
-}
+    );
+};
 
 export default ViewUser;
