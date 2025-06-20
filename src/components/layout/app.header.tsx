@@ -1,5 +1,5 @@
 import { Menu, Tent, User, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LanguageSwitcher from 'components/ui/language.switcher';
 import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
@@ -12,6 +12,7 @@ const AppHeader = () => {
     const { user, isAuthenticated, setUser, setIsAuthenticated } = useCurrentApp();
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
     const userDropdownRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -22,6 +23,7 @@ const AppHeader = () => {
             setUser(null);
             setIsAuthenticated(false);
         }
+        navigate('/login');
     };
 
     useEffect(() => {

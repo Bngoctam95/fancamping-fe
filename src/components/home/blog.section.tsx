@@ -14,7 +14,7 @@ const BlogSection = () => {
             setIsLoading(true);
             const res = await getAllPostsAPI(`type=blog&status=published`);
             if (res?.data) {
-                setDisplayedBlogs(res.data);
+                setDisplayedBlogs(res.data.slice(0, 6));
             }
         } catch (error) {
             console.error('Error fetching equipment categories:', error);

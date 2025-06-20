@@ -206,7 +206,7 @@ const WriteBlogPage = () => {
     return (
         <section className="py-8 bg-canvas min-h-screen">
             <div className="container mx-auto px-6">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-4xl mx-auto font-montserrat">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-2xl font-bold font-montserrat">Tạo Blog Mới</h2>
                         <div className="flex gap-3">

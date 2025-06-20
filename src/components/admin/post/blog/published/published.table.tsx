@@ -1,10 +1,10 @@
-import { getAllPostsAPI } from "@/services/api";
-import { Button, Table } from "antd";
-import type { TableProps } from "antd/lib";
-import { useEffect, useState } from "react";
+import { getAllPostsAPI } from '@/services/api';
+import { Button, Table } from 'antd';
+import type { TableProps } from 'antd/lib';
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { formatDate } from 'services/helper';
 
-const PublishedTable = () => {
+const PublishedTable = forwardRef<{ refreshData: () => void }>((_, ref) => {
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
     const [data, setData] = useState<IPostTable[]>([]);
     const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ const PublishedTable = () => {
                 const dateA = new Date(a.createdAt).getTime();
                 const dateB = new Date(b.createdAt).getTime();
                 return dateA - dateB;
-            }
+            },
         },
         {
             title: 'Hành động',
@@ -65,7 +65,6 @@ const PublishedTable = () => {
                     >
                         Xóa
                     </Button>
-
                 </>
             ),
         },
@@ -73,7 +72,7 @@ const PublishedTable = () => {
 
     const handleDelete = async (id: string) => {
         console.log(id);
-    }
+    };
 
     const refreshData = async () => {
         try {
@@ -88,6 +87,10 @@ const PublishedTable = () => {
             setLoading(false);
         }
     };
+
+    useImperativeHandle(ref, () => ({
+        refreshData,
+    }));
 
     useEffect(() => {
         refreshData();
@@ -107,11 +110,11 @@ const PublishedTable = () => {
                     showTotal: (total) => `Tổng ${total} mục`,
                     onChange: (current, pageSize) => {
                         setPagination({ current, pageSize });
-                    }
+                    },
                 }}
             />
         </div>
-    )
-}
+    );
+});
 
 export default PublishedTable;

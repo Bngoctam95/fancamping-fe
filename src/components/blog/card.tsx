@@ -32,8 +32,8 @@ const BlogCard = ({ blog }: { blog: IPostTable }) => {
                         <p className="text-sm text-gray-600 mb-0">{formatDate(blog.createdAt)}</p>
                     </div>
                 </div>
-                <h3 className="text-xl font-semibold font-montserrat mb-2 min-h-[48px]">{blog.title}</h3>
-                <p className="text-charcoal mb-4">{truncateContent(blog.subTitle)}</p>
+                <h3 className="text-lg font-semibold font-montserrat mb-2 min-h-[50px]">{blog.title}</h3>
+                <p className="font-montserrat text-charcoal mb-4">{truncateContent(blog.subTitle)}</p>
                 <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-4">
                         <span className="flex items-center text-sm text-gray-600">
@@ -46,8 +46,8 @@ const BlogCard = ({ blog }: { blog: IPostTable }) => {
                         </span>
                     </div>
                     <Link to={`/blog/${blog.slug}`}>
-                        <button className="text-forest hover:text-campfire font-medium font-montserrat">
-                            Read More
+                        <button className="text-campfire hover:text-secondary font-semibold text-base font-montserrat">
+                            Đọc thêm
                         </button>
                     </Link>
                 </div>

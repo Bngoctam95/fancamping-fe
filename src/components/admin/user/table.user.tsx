@@ -90,6 +90,19 @@ const TableUser = () => {
             sorter: true,
         },
         {
+            title: 'Vai trò',
+            dataIndex: 'role',
+            render(_, entity) {
+                return entity.role === 'user'
+                    ? 'User'
+                    : entity.role === 'admin'
+                      ? 'Admin'
+                      : entity.role === 'super_admin'
+                        ? 'Super Admin'
+                        : 'Moderator';
+            },
+        },
+        {
             title: 'Email',
             dataIndex: 'email',
             copyable: true,
@@ -127,7 +140,11 @@ const TableUser = () => {
                             placement="leftTop"
                             okButtonProps={{ loading: isDeleteUser }}
                         >
-                            <DeleteTwoTone twoToneColor="#ff4d4f" style={{ cursor: 'pointer' }} title="Xóa người dùng" />
+                            <DeleteTwoTone
+                                twoToneColor="#ff4d4f"
+                                style={{ cursor: 'pointer' }}
+                                title="Xóa người dùng"
+                            />
                         </Popconfirm>
                     </>
                 );
@@ -209,8 +226,17 @@ const TableUser = () => {
                 ]}
             />
             <ViewUser openViewUser={openViewUser} setOpenViewUser={setOpenViewUser} userView={userView} />
-            <UpdateUser openUpdateUser={openUpdateUser} setOpenUpdateUser={setOpenUpdateUser} userUpdate={userUpdate} refreshTable={refreshTable} />
-            <CreateUser openCreateUser={openCreateUser} setOpenCreateUser={setOpenCreateUser} refreshTable={refreshTable} />
+            <UpdateUser
+                openUpdateUser={openUpdateUser}
+                setOpenUpdateUser={setOpenUpdateUser}
+                userUpdate={userUpdate}
+                refreshTable={refreshTable}
+            />
+            <CreateUser
+                openCreateUser={openCreateUser}
+                setOpenCreateUser={setOpenCreateUser}
+                refreshTable={refreshTable}
+            />
         </>
     );
 };

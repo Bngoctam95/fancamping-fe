@@ -1,13 +1,16 @@
-import { getAllPostsAPI, updatePostStatusAPI } from "@/services/api";
-import { App, Button, Table } from "antd";
-import type { TableProps } from "antd/lib";
-import { useEffect, useState } from "react";
+import { getAllPostsAPI, updatePostStatusAPI } from '@/services/api';
+import { App, Button, Table } from 'antd';
+import type { TableProps } from 'antd/lib';
+import { useEffect, useState } from 'react';
 import { formatDate } from 'services/helper';
+import ViewBlogModal from 'components/admin/post/blog/modal.blog';
 
 const PendingTable = () => {
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
     const [data, setData] = useState<IPostTable[]>([]);
     const [loading, setLoading] = useState(false);
+    const [openViewBlog, setOpenViewBlog] = useState(false);
+    const [blogView, setBlogView] = useState<IPostTable | null>(null);
     const { message } = App.useApp();
 
     const columns: TableProps<IPostTable>['columns'] = [
@@ -23,6 +26,18 @@ const PendingTable = () => {
             title: 'ID',
             dataIndex: '_id',
             key: '_id',
+            render(_, entity) {
+                return (
+                    <a
+                        href="#"
+                        onClick={() => {
+                            handlePreviewBlog(entity);
+                        }}
+                    >
+                        {entity._id}
+                    </a>
+                );
+            },
         },
         {
             title: 'Tiêu đề',
@@ -51,7 +66,7 @@ const PendingTable = () => {
                 const dateA = new Date(a.createdAt).getTime();
                 const dateB = new Date(b.createdAt).getTime();
                 return dateA - dateB;
-            }
+            },
         },
         {
             title: 'Hành động',
@@ -76,11 +91,15 @@ const PendingTable = () => {
                     >
                         Từ chối
                     </Button>
-
                 </>
             ),
         },
     ];
+
+    const handlePreviewBlog = (blog: IPostTable) => {
+        setOpenViewBlog(true);
+        setBlogView(blog);
+    };
 
     const handleApprove = async (id: string) => {
         setLoading(true);
@@ -92,7 +111,7 @@ const PendingTable = () => {
             message.error('Duyệt bài viết thất bại');
         }
         setLoading(false);
-    }
+    };
 
     const handleReject = async (id: string) => {
         setLoading(true);
@@ -104,7 +123,7 @@ const PendingTable = () => {
             message.error('Từ chối bài viết thất bại');
         }
         setLoading(false);
-    }
+    };
 
     const refreshData = async () => {
         try {
@@ -138,11 +157,12 @@ const PendingTable = () => {
                     showTotal: (total) => `Tổng ${total} mục`,
                     onChange: (current, pageSize) => {
                         setPagination({ current, pageSize });
-                    }
+                    },
                 }}
             />
+            <ViewBlogModal openViewBlog={openViewBlog} setOpenViewBlog={setOpenViewBlog} blogView={blogView} />
         </div>
-    )
-}
+    );
+};
 
 export default PendingTable;

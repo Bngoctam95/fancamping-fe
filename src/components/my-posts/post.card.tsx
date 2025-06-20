@@ -5,16 +5,15 @@ import { Popconfirm } from 'antd';
 interface IPostCardProps {
     post: IPostTable;
     onEdit?: (id: string) => void;
+    onPreview?: (id: string) => void;
     onDelete?: (id: string) => void;
     isShowAction?: boolean;
 }
 
-const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProps) => {
+const PostCard = ({ post, onEdit, onPreview, onDelete, isShowAction = true }: IPostCardProps) => {
     const handleDelete = () => {
         onDelete?.(post._id);
     };
-
-    const handlePreview = () => {};
 
     return (
         <div
@@ -36,11 +35,6 @@ const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProp
                     <div className="flex items-center gap-1 font-semibold bg-gray-100 px-2 py-1 rounded-full">
                         <BookmarkCheck size={16} />
                         {post.categoryId?.name}
-                    </div>
-                    <div className="flex items-center gap-1 font-semibold bg-orange-300 px-2 py-1 rounded-full">
-                        <button className="flex items-center gap-1" onClick={handlePreview}>
-                            Xem bài viết <Eye size={16} className="ml-1" />
-                        </button>
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 mb-3 text-sm">
@@ -75,8 +69,17 @@ const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProp
                     ))}
                 </div>
             </div>
-            {isShowAction && (post.status === 'draft' || post.status === 'pending') && (
+            {isShowAction && (post.status === 'draft' || post.status === 'pending') ? (
                 <div className="flex items-center gap-2 mt-4 md:mt-0 md:ml-4">
+                    <button
+                        onClick={() => onPreview?.(post._id)}
+                        className="p-2 rounded hover:bg-gray-100 transition-all duration-200 group relative"
+                        style={{ color: 'var(--secondary-color)' }}
+                        aria-label="Preview post"
+                        title="Xem bài viết"
+                    >
+                        <Eye size={18} />
+                    </button>
                     <button
                         onClick={() => onEdit?.(post._id)}
                         className="p-2 rounded hover:bg-gray-100 transition-all duration-200 group relative"
@@ -100,7 +103,31 @@ const PostCard = ({ post, onEdit, onDelete, isShowAction = true }: IPostCardProp
                         </span>
                     </Popconfirm>
                 </div>
-            )}
+            ) : isShowAction && post.status === 'published' ? (
+                <div className="flex items-center gap-2 mt-4 md:mt-0 md:ml-4">
+                    <button
+                        onClick={() => onPreview?.(post._id)}
+                        className="p-2 rounded hover:bg-gray-100 transition-all duration-200 group relative"
+                        style={{ color: 'var(--secondary-color)' }}
+                        aria-label="Preview post"
+                        title="Xem bài viết"
+                    >
+                        <Eye size={18} />
+                    </button>
+                </div>
+            ) : isShowAction && post.status === 'archived' ? (
+                <div className="flex items-center gap-2 mt-4 md:mt-0 md:ml-4">
+                    <button
+                        onClick={() => onPreview?.(post._id)}
+                        className="p-2 rounded hover:bg-gray-100 transition-all duration-200 group relative"
+                        style={{ color: 'var(--secondary-color)' }}
+                        aria-label="Preview post"
+                        title="Xem bài viết"
+                    >
+                        <Eye size={18} />
+                    </button>
+                </div>
+            ) : null}
         </div>
     );
 };

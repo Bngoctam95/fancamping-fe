@@ -119,5 +119,11 @@
             "quantity": "Quantity",
             "items": "items"
         }
+    },
+    "blog": {
+        "hero": {
+            "title": "Blog",
+            "subtitle": "Read our latest blog posts and stay updated with the latest camping tips and tricks"
+        }
     }
 }

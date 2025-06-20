@@ -22,7 +22,12 @@ import { useCallback, useRef } from 'react';
 import { App } from 'antd';
 import { uploadPostImageAPI } from '@/services/api';
 
-const MenuBar = ({ editor }: { editor: Editor }) => {
+interface MenuBarProps {
+    editor: Editor;
+    isSticky?: boolean;
+}
+
+const MenuBar = ({ editor, isSticky = false }: MenuBarProps) => {
     const imageInputRef = useRef<HTMLInputElement>(null);
     const { message } = App.useApp();
     const setLink = useCallback(() => {
@@ -264,7 +269,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
     ];
 
     return (
-        <div className="border-b border-gray-200 p-3 flex flex-wrap gap-2">
+        <div className={`p-3 flex flex-wrap gap-2 ${isSticky ? 'bg-blue-50 border-l-4 border-blue-500' : ''}`}>
             <input type="file" ref={imageInputRef} accept="image/*" onChange={handleImageUpload} className="hidden" />
             {options.map((option) => (
                 <button
