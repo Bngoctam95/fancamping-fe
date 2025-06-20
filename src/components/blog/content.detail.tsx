@@ -12,7 +12,6 @@ import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 
 const ContentDetail = ({ content }: { content: string }) => {
-    console.log(content);
     const editor = useEditor({
         editable: false,
         extensions: [
@@ -54,11 +53,7 @@ const ContentDetail = ({ content }: { content: string }) => {
     });
 
     if (!editor) return null;
-    return (
-        <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-            <EditorContent editor={editor} />
-        </div>
-    );
+    return <EditorContent editor={editor} className="font-montserrat" />;
 };
 
 export default ContentDetail;

@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useCurrentApp } from 'hooks/useCurrentApp';
 
 const HeroSection = () => {
     const { t } = useTranslation();
+    const { isAuthenticated } = useCurrentApp();
 
     return (
         <section className="relative">
@@ -26,7 +28,7 @@ const HeroSection = () => {
                                 {t('home.hero.rentEquipment')}
                             </Link>
                             <Link
-                                to="/login"
+                                to={isAuthenticated ? '/blog' : '/login'}
                                 className="px-8 py-3 bg-secondary text-white font-semibold rounded-md hover:text-white hover:bg-secondary-hover transition duration-300 font-montserrat inline-block"
                             >
                                 {t('home.hero.joinCommunity')}

@@ -1,9 +1,9 @@
-import { Menu, Plus, Tent, User, X } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useState, useRef, useEffect } from "react";
-import { useCurrentApp } from "hooks/useCurrentApp";
-import { logoutAPI } from "services/api";
+import { Menu, Plus, Tent, User, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useState, useRef, useEffect } from 'react';
+import { useCurrentApp } from 'hooks/useCurrentApp';
+import { logoutAPI } from 'services/api';
 
 const BlogHeader = () => {
     const { t } = useTranslation();
@@ -11,6 +11,7 @@ const BlogHeader = () => {
     const { user, isAuthenticated, setUser, setIsAuthenticated } = useCurrentApp();
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
     const userDropdownRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -21,6 +22,7 @@ const BlogHeader = () => {
             setUser(null);
             setIsAuthenticated(false);
         }
+        navigate('/login');
     };
 
     useEffect(() => {
@@ -43,21 +45,20 @@ const BlogHeader = () => {
                     <Link to="/">
                         <div className="flex items-center space-x-2 cursor-pointer">
                             <Tent className="text-secondary text-2xl" />
-                            <span className="font-montserrat font-bold text-2xl text-white">
-                                {t('siteName')}
-                            </span>
+                            <span className="font-montserrat font-bold text-2xl text-white">{t('siteName')}</span>
                         </div>
                     </Link>
 
                     <div className="flex items-center space-x-4">
                         <div className="hidden md:flex items-center space-x-4">
-                            <Link to="/my-blog/list" className="font-montserrat font-semibold text-white hover:text-secondary transition-colors">
+                            <Link
+                                to="/my-blog/list"
+                                className="font-montserrat font-semibold text-white hover:text-secondary transition-colors"
+                            >
                                 Blog của tôi
                             </Link>
                             <Link to="/my-blog/write">
-                                <button
-                                    className="bg-campfire font-montserrat font-semibold flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-campfire-hover transition-opacity"
-                                >
+                                <button className="bg-campfire font-montserrat font-semibold flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-campfire-hover transition-opacity">
                                     <Plus size={16} />
                                     Viết blog
                                 </button>
@@ -71,7 +72,7 @@ const BlogHeader = () => {
                                     onClick={() => setIsUserDropdownOpen((prev) => !prev)}
                                     className="flex items-center gap-2 bg-dropdown border border-gray-700 rounded p-2 text-white hover:border-blue-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer duration-200"
                                 >
-                                    <User className="h-5 w-5 text-white" />
+                                    <User className="h-6 w-6 text-white" />
                                     <svg
                                         className={`fill-current h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`}
                                         xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +85,15 @@ const BlogHeader = () => {
                                     <div className="absolute right-0 mt-2 min-w-[180px] rounded-md bg-dropdown border border-gray-700 shadow-lg animate-fadeIn z-50">
                                         <div className="py-1 px-1">
                                             <div className="flex items-center px-3 py-2 text-white text-base font-semibold">
-                                                <User className="h-4 w-4 mr-2" />
+                                                {user?.avatar ? (
+                                                    <img
+                                                        src={`${import.meta.env.VITE_BACKEND_URL}uploads/users/${user?.avatar}`}
+                                                        alt="profile"
+                                                        className="h-10 w-10 mr-2 rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <User className="h-4 w-4 mr-2" />
+                                                )}
                                                 <span>{user?.name || 'User'}</span>
                                             </div>
                                             <div className="my-1 border-t border-gray-700" />
@@ -93,30 +102,48 @@ const BlogHeader = () => {
                                                 className="flex items-center px-3 py-2 text-white text-base hover:bg-gray-700 rounded transition-colors duration-150"
                                                 onClick={() => setIsUserDropdownOpen(false)}
                                             >
-                                                {t("header.profile")}
+                                                {t('header.profile')}
                                             </Link>
                                             <Link
                                                 to="/my-rentals"
                                                 className="flex items-center px-3 py-2 text-white text-base hover:bg-gray-700 rounded transition-colors duration-150"
                                                 onClick={() => setIsUserDropdownOpen(false)}
                                             >
-                                                {t("header.myRentals")}
+                                                {t('header.myRentals')}
                                             </Link>
                                             <div className="my-1 border-t border-gray-700" />
                                             <button
-                                                onClick={() => { setIsUserDropdownOpen(false); handleLogout(); }}
+                                                onClick={() => {
+                                                    setIsUserDropdownOpen(false);
+                                                    handleLogout();
+                                                }}
                                                 className="flex items-center w-full px-3 py-2 text-white text-base hover:bg-gray-700 rounded transition-colors duration-150"
                                             >
-                                                <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
-                                                {t("header.signOut")}
+                                                <svg
+                                                    className="h-4 w-4 mr-2"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"
+                                                    />
+                                                </svg>
+                                                {t('header.signOut')}
                                             </button>
                                         </div>
                                     </div>
                                 )}
                             </div>
                         ) : (
-                            <Link to="/login" className="font-montserrat font-medium text-white text-base hover:text-secondary transition-colors">
-                                {t("header.login")}
+                            <Link
+                                to="/login"
+                                className="font-montserrat font-medium text-white text-base hover:text-secondary transition-colors"
+                            >
+                                {t('header.login')}
                             </Link>
                         )}
 
@@ -137,32 +164,50 @@ const BlogHeader = () => {
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                             {isAuthenticated ? (
                                 <>
-                                    <Link to="/my-blog/list" className="block py-2 text-white text-base hover:text-secondary transition-colors">
+                                    <Link
+                                        to="/my-blog/list"
+                                        className="block py-2 text-white text-base hover:text-secondary transition-colors"
+                                    >
                                         My Stories
                                     </Link>
-                                    <Link to="/my-blog/write" className="block py-2 text-white text-base hover:text-secondary transition-colors">
+                                    <Link
+                                        to="/my-blog/write"
+                                        className="block py-2 text-white text-base hover:text-secondary transition-colors"
+                                    >
                                         New Story
                                     </Link>
-                                    <Link to="/profile" className="block py-2 text-white text-base hover:text-secondary transition-colors">
-                                        {t("header.profile")}
+                                    <Link
+                                        to="/profile"
+                                        className="block py-2 text-white text-base hover:text-secondary transition-colors"
+                                    >
+                                        {t('header.profile')}
                                     </Link>
-                                    <Link to="/my-rentals" className="block py-2 text-white text-base hover:text-secondary transition-colors">
-                                        {t("header.myRentals")}
+                                    <Link
+                                        to="/my-rentals"
+                                        className="block py-2 text-white text-base hover:text-secondary transition-colors"
+                                    >
+                                        {t('header.myRentals')}
                                     </Link>
                                     <button
                                         onClick={handleLogout}
                                         className="block w-full text-left py-2 text-white text-base hover:text-secondary transition-colors"
                                     >
-                                        {t("header.signOut")}
+                                        {t('header.signOut')}
                                     </button>
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/login" className="block py-2 text-white text-base hover:text-secondary transition-colors">
+                                    <Link
+                                        to="/login"
+                                        className="block py-2 text-white text-base hover:text-secondary transition-colors"
+                                    >
                                         {t('header.login')}
                                     </Link>
-                                    <Link to="/register" className="block py-2 text-white text-base hover:text-secondary transition-colors">
-                                        {t("header.register")}
+                                    <Link
+                                        to="/register"
+                                        className="block py-2 text-white text-base hover:text-secondary transition-colors"
+                                    >
+                                        {t('header.register')}
                                     </Link>
                                 </>
                             )}
@@ -171,8 +216,7 @@ const BlogHeader = () => {
                 )}
             </div>
         </header>
-    )
-}
+    );
+};
 
 export default BlogHeader;
-

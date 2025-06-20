@@ -55,10 +55,9 @@ const RentalPage = () => {
                     item.description?.toLowerCase().includes(searchLower)
             );
         }
-        console.log('result', result);
         return result;
     }, [allEquipment, selectedCategoryId, searchValue]);
-    console.log('re-render');
+
     return (
         <>
             <Helmet>

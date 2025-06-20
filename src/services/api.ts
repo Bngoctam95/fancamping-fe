@@ -71,26 +71,6 @@ export const updateEquipmentCategoryAPI = (_id: string, name: string, slug: stri
     return axios.put<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description });
 };
 
-export const getPostCategoriesAPI = () => {
-    const urlBackend = 'posts/categories?type=post';
-    return axios.get<IBackendRes<IEquipmentCategory>>(urlBackend);
-};
-
-export const createPostCategoryAPI = (name: string, slug: string, description: string, type: string) => {
-    const urlBackend = 'posts/categories';
-    return axios.post<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description, type });
-};
-
-export const deletePostCategoryAPI = (_id: string) => {
-    const urlBackend = `posts/categories/${_id}`;
-    return axios.delete<IBackendRes<IDeleteEquipmentCategory>>(urlBackend);
-};
-
-export const updatePostCategoryAPI = (_id: string, name: string, slug: string, description: string) => {
-    const urlBackend = `posts/categories/${_id}`;
-    return axios.put<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description });
-};
-
 export const getProductsAPI = (query: string) => {
     const urlBackend = `products?${query}`;
     return axios.get<IBackendRes<IModelPaginate<IProductTable>>>(urlBackend);
@@ -214,6 +194,26 @@ export const uploadPostImageAPI = (file: File) => {
             'Content-Type': 'multipart/form-data',
         },
     });
+};
+
+export const getPostCategoriesAPI = () => {
+    const urlBackend = 'posts/categories?type=post';
+    return axios.get<IBackendRes<IEquipmentCategory>>(urlBackend);
+};
+
+export const createPostCategoryAPI = (name: string, slug: string, description: string, type: string) => {
+    const urlBackend = 'posts/categories';
+    return axios.post<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description, type });
+};
+
+export const deletePostCategoryAPI = (_id: string) => {
+    const urlBackend = `posts/categories/${_id}`;
+    return axios.delete<IBackendRes<IDeleteEquipmentCategory>>(urlBackend);
+};
+
+export const updatePostCategoryAPI = (_id: string, name: string, slug: string, description: string) => {
+    const urlBackend = `posts/categories/${_id}`;
+    return axios.put<IBackendRes<IEquipmentCategory>>(urlBackend, { name, slug, description });
 };
 
 export const createPostAPI = (

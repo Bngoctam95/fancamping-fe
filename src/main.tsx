@@ -34,6 +34,7 @@ import ManaPostPage from 'pages/admin/manage.post';
 import ScrollToTop from 'components/ScrollToTop';
 import ProfilePage from 'pages/client/profile';
 import BlogDetailPage from 'pages/client/blog.detail';
+import MyBlogPreviewPage from 'pages/client/my-blog/view';
 
 const router = createBrowserRouter([
     {
@@ -194,6 +195,10 @@ const router = createBrowserRouter([
             {
                 path: ':id/edit',
                 element: <EditBlogPage />,
+            },
+            {
+                path: ':id/view',
+                element: <MyBlogPreviewPage />,
             },
         ],
     },

@@ -1,17 +1,12 @@
-import {
-    getPostByIdAPI,
-    getPostCategoriesAPI,
-    updatePostAPI,
-    uploadPostThumbnailAPI,
-} from 'services/api';
+import { getPostByIdAPI, getPostCategoriesAPI, updatePostAPI, uploadPostThumbnailAPI } from 'services/api';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { App, Select, Upload } from 'antd';
 import type { GetProp, UploadFile, UploadProps } from 'antd/lib';
 import DropdownDefault from '@/components/ui/dropdown';
-import PostEditor from '@/components/ui/post.editor';
 import { v4 as uuidv4 } from 'uuid';
+import TiptapEditor from 'components/ui/tiptap-editor/tiptap.editor';
 
 interface DropdownOption {
     _id: string;
@@ -267,8 +262,9 @@ const EditBlogPage = () => {
                             <button
                                 disabled={isSaving}
                                 onClick={handleSaveDraft}
-                                className={`${isSaving ? 'bg-gray-400' : 'bg-zinc-600'
-                                    } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity flex items-center gap-2`}
+                                className={`${
+                                    isSaving ? 'bg-gray-400' : 'bg-zinc-600'
+                                } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity flex items-center gap-2`}
                             >
                                 {isSaving ? (
                                     <>
@@ -282,8 +278,9 @@ const EditBlogPage = () => {
                             <button
                                 disabled={isSaving}
                                 onClick={handlePublish}
-                                className={`${isSaving ? 'bg-gray-400' : 'bg-campfire'
-                                    } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity`}
+                                className={`${
+                                    isSaving ? 'bg-gray-400' : 'bg-campfire'
+                                } text-white text-sm font-semibold px-4 py-2 rounded-lg border hover:opacity-90 transition-opacity`}
                             >
                                 Đăng bài
                             </button>
@@ -396,7 +393,9 @@ const EditBlogPage = () => {
                                 <label className="block text-base font-medium text-gray-700 mb-2">
                                     Nội dung <span className="text-red-500">*</span>
                                 </label>
-                                <PostEditor content={post?.content || ''} onChange={setBlogContent} />
+                                <div className="border rounded-lg overflow-hidden">
+                                    <TiptapEditor content={post?.content || ''} onChange={setBlogContent} />
+                                </div>
                             </div>
                         </div>
                     </div>

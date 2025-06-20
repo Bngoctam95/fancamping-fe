@@ -79,6 +79,10 @@ const MyBlogListPage = () => {
         }
     };
 
+    const handlePreview = (id: string) => {
+        navigate(`/my-blog/${id}/view`);
+    };
+
     return (
         <section className="py-8 bg-canvas min-h-screen">
             <div className="container mx-auto px-6">
@@ -101,7 +105,13 @@ const MyBlogListPage = () => {
                         <EmptyState onCreateNew={handleCreateNew} />
                     ) : (
                         myBlogs.map((post) => (
-                            <PostCard key={post._id} post={post} onEdit={handleEdit} onDelete={handleDelete} />
+                            <PostCard
+                                key={post._id}
+                                post={post}
+                                onEdit={handleEdit}
+                                onPreview={handlePreview}
+                                onDelete={handleDelete}
+                            />
                         ))
                     )}
                 </div>
