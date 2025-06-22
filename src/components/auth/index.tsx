@@ -29,7 +29,37 @@ const ProtectedRoute = (props: IProps) => {
                 <Result
                     status="403"
                     title="403"
-                    subTitle="Sorry, you are not authorized to access this page."
+                    subTitle="Bạn không có quyền truy cập trang này."
+                    extra={<Button type="primary"><Link to="/">Back Home</Link></Button>}
+                />
+            )
+        }
+    }
+
+    const isMyBlogRoute = location.pathname.includes("my-blog");
+    if (isMyBlogRoute === true && isAuthenticated === true) {
+        const role = user?.role;
+        if (role === "mod" || role === "admin" || role === "user") {
+            return (
+                <Result
+                    status="403"
+                    title="403"
+                    subTitle="Bạn không có quyền truy cập trang này."
+                    extra={<Button type="primary"><Link to="/">Back Home</Link></Button>}
+                />
+            )
+        }
+    }
+
+    const isMyArticlesRoute = location.pathname.includes("my-articles");
+    if (isMyArticlesRoute === true && isAuthenticated === true) {
+        const role = user?.role;
+        if (role === "user") {
+            return (
+                <Result
+                    status="403"
+                    title="403"
+                    subTitle="Bạn không có quyền truy cập trang này."
                     extra={<Button type="primary"><Link to="/">Back Home</Link></Button>}
                 />
             )

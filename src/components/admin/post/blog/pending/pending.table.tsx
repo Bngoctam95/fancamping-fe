@@ -128,7 +128,7 @@ const PendingTable = () => {
     const refreshData = async () => {
         try {
             setLoading(true);
-            const res = await getAllPostsAPI(`type=blog&status=pending`);
+            const res = await getAllPostsAPI(`status=pending`);
             if (res?.data) {
                 setData(res.data);
             }

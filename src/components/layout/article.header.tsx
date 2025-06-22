@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useCurrentApp } from 'hooks/useCurrentApp';
 import { logoutAPI } from 'services/api';
 
-const BlogHeader = () => {
+const ArticleHeader = () => {
     const { t } = useTranslation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { user, isAuthenticated, setUser, setIsAuthenticated } = useCurrentApp();
@@ -52,15 +52,15 @@ const BlogHeader = () => {
                     <div className="flex items-center space-x-4">
                         <div className="hidden md:flex items-center space-x-4">
                             <Link
-                                to="/my-blog/list"
+                                to="/my-articles/list"
                                 className="font-montserrat font-semibold text-white hover:text-secondary transition-colors"
                             >
-                                Blog của tôi
+                                Bài viết của tôi
                             </Link>
-                            <Link to="/my-blog/write">
+                            <Link to="/my-articles/write">
                                 <button className="bg-campfire font-montserrat font-semibold flex items-center gap-2 px-4 py-2 rounded-lg text-white hover:bg-campfire-hover transition-opacity">
                                     <Plus size={16} />
-                                    Viết blog
+                                    Viết bài
                                 </button>
                             </Link>
                         </div>
@@ -151,16 +151,16 @@ const BlogHeader = () => {
                             {isAuthenticated ? (
                                 <>
                                     <Link
-                                        to="/my-blog/list"
+                                        to="/my-articles/list"
                                         className="block py-2 text-white text-base hover:text-secondary transition-colors"
                                     >
-                                        Blog của tôi
+                                        Bài viết của tôi
                                     </Link>
                                     <Link
-                                        to="/my-blog/write"
+                                        to="/my-articles/write"
                                         className="block py-2 text-white text-base hover:text-secondary transition-colors"
                                     >
-                                        Viết blog
+                                        Viết bài
                                     </Link>
                                     <Link
                                         to="/profile"
@@ -205,4 +205,4 @@ const BlogHeader = () => {
     );
 };
 
-export default BlogHeader;
+export default ArticleHeader;

@@ -241,7 +241,7 @@ export const createPostAPI = (
     });
 };
 
-export const getMyBlogsAPI = () => {
+export const getMyPostsAPI = () => {
     const urlBackend = 'posts/my-posts';
     return axios.get<IBackendRes<IPostTable[]>>(urlBackend);
 };

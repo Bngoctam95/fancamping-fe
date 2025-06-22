@@ -35,6 +35,13 @@ import ScrollToTop from 'components/ScrollToTop';
 import ProfilePage from 'pages/client/profile';
 import BlogDetailPage from 'pages/client/blog.detail';
 import MyBlogPreviewPage from 'pages/client/my-blog/view';
+import NotFoundPage from 'pages/notfound.page';
+import MyArticlesLayout from 'pages/client/my-articles/layout';
+import MyArticlesHomePage from 'pages/client/my-articles/home';
+import MyArticlesListPage from 'pages/client/my-articles/list';
+import WriteArticlePage from 'pages/client/my-articles/write';
+import EditArticlePage from 'pages/client/my-articles/edit';
+import MyArticlesPreviewPage from 'pages/client/my-articles/view';
 
 const router = createBrowserRouter([
     {
@@ -202,6 +209,43 @@ const router = createBrowserRouter([
             },
         ],
     },
+    {
+        path: '/my-articles',
+        element: (
+            <>
+                <ScrollToTop />
+                <ProtectedRoute>
+                    <MyArticlesLayout />
+                </ProtectedRoute>
+            </>
+        ),
+        children: [
+            {
+                index: true,
+                element: <MyArticlesHomePage />,
+            },
+            {
+                path: 'list',
+                element: <MyArticlesListPage />,
+            },
+            {
+                path: 'write',
+                element: <WriteArticlePage />,
+            },
+            {
+                path: ':id/edit',
+                element: <EditArticlePage />,
+            },
+            {
+                path: ':id/view',
+                element: <MyArticlesPreviewPage />,
+            },
+        ],
+    },
+    {
+        path: '*',
+        element: <NotFoundPage />,
+    }
 ]);
 
 createRoot(document.getElementById('root')!).render(

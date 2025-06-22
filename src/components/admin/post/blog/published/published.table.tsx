@@ -77,7 +77,7 @@ const PublishedTable = forwardRef<{ refreshData: () => void }>((_, ref) => {
     const refreshData = async () => {
         try {
             setLoading(true);
-            const res = await getAllPostsAPI(`type=blog&status=published`);
+            const res = await getAllPostsAPI(`status=published`);
             if (res?.data) {
                 setData(res.data);
             }

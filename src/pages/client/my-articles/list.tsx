@@ -37,50 +37,50 @@ const EmptyState = ({ onCreateNew }: { onCreateNew: () => void }) => (
     </div>
 );
 
-const MyBlogListPage = () => {
-    const [myBlogs, setMyBlogs] = useState<IPostTable[]>([]);
+const MyArticlesListPage = () => {
+    const [myArticles, setMyArticles] = useState<IPostTable[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const { message } = App.useApp();
 
     useEffect(() => {
-        const fetchMyBlogs = async () => {
+        const fetchMyArticles = async () => {
             try {
                 setIsLoading(true);
                 const res = await getMyPostsAPI();
                 if (res?.data) {
-                    setMyBlogs(res.data);
+                    setMyArticles(res.data);
                 }
             } catch (error) {
-                console.error('Failed to fetch blogs:', error);
+                console.error('Failed to fetch articles:', error);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchMyBlogs();
+        fetchMyArticles();
     }, []);
 
     const handleCreateNew = () => {
-        navigate('/my-blog/write');
+        navigate('/my-articles/write');
     };
 
     const handleEdit = (id: string) => {
-        navigate(`/my-blog/${id}/edit`);
+        navigate(`/my-articles/${id}/edit`);
     };
 
     const handleDelete = async (id: string) => {
         const res = await deletePostAPI(id);
         if (res?.data) {
             message.success('Xóa bài viết thành công');
-            setMyBlogs(myBlogs.filter((post) => post._id !== id));
+            setMyArticles(myArticles.filter((post) => post._id !== id));
         } else {
             message.error(res?.message || 'Lỗi khi xóa bài viết');
         }
     };
 
     const handlePreview = (id: string) => {
-        navigate(`/my-blog/${id}/view`);
+        navigate(`/my-articles/${id}/view`);
     };
 
     return (
@@ -89,7 +89,7 @@ const MyBlogListPage = () => {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Bài viết của tôi</h1>
                     <button
-                        onClick={() => navigate('/my-blog')}
+                        onClick={() => navigate('/my-articles')}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-button text-white font-montserrat text-sm font-semibold rounded-lg hover:bg-button-hover transition-colors"
                     >
                         Quay lại Bảng điều khiển
@@ -101,10 +101,10 @@ const MyBlogListPage = () => {
                         Array(3)
                             .fill(0)
                             .map((_, i) => <PostCardSkeleton key={i} />)
-                    ) : myBlogs.length === 0 ? (
+                    ) : myArticles.length === 0 ? (
                         <EmptyState onCreateNew={handleCreateNew} />
                     ) : (
-                        myBlogs.map((post) => (
+                        myArticles.map((post) => (
                             <PostCard
                                 key={post._id}
                                 post={post}
@@ -120,4 +120,4 @@ const MyBlogListPage = () => {
     );
 };
 
-export default MyBlogListPage;
+export default MyArticlesListPage;

@@ -13,7 +13,7 @@ const BlogPage = () => {
     const [allBlogs, setAllBlogs] = useState<IPostTable[]>([]);
     const [isLoadingBlogs, setIsLoadingBlogs] = useState<boolean>(true);
     const fetchAllBlogs = async () => {
-        const query = 'page=1&limit=100';
+        const query = 'type=blog&page=1&limit=100';
         const res = await getAllPostsAPI(query);
         if (res?.data) {
             setAllBlogs(res.data);
