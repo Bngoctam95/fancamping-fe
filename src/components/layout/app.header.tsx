@@ -83,9 +83,11 @@ const AppHeader = () => {
 
                     <div className="flex items-center space-x-4">
                         {/* Language Switcher - Desktop */}
+                        {/*
                         <div className="hidden md:block">
                             <LanguageSwitcher />
                         </div>
+                        */}
 
                         {/* User Menu */}
                         {isAuthenticated ? (
