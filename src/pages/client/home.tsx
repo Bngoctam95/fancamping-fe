@@ -1,8 +1,10 @@
 import FeaturedEquipment from 'components/home/featured.equipment';
 import HeroSection from 'components/home/hero.section';
 import BlogSection from 'components/home/blog.section';
+import ArticleSection from 'components/home/article.section';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import CallAction from 'components/home/call.action';
 
 const HomePage = () => {
     const { t } = useTranslation();
@@ -21,6 +23,8 @@ const HomePage = () => {
                 <HeroSection />
                 <FeaturedEquipment />
                 <BlogSection />
+                <ArticleSection />
+                <CallAction />
             </div>
         </>
     );

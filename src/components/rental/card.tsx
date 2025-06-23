@@ -25,7 +25,7 @@ const RentalCard = ({ equipment }: RentalCardProps) => {
     const urlEquipment = `${import.meta.env.VITE_BACKEND_URL}uploads/products/thumbnails/${equipment?.thumbnail}`;
 
     return (
-        <div className="bg-canvas rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+        <div className="bg-[#eaeded] rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
             <div className="relative h-56">
                 <img
                     src={urlEquipment}
